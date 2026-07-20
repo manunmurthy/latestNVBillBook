@@ -1,0 +1,62 @@
+bank: hdfc
+
+society:
+  name: "Nava Vaibhva Resi Welfare Association"
+  short_name: "Nava Vaibhva"
+
+paths:
+  input_dir: "data/input"
+  output_dir: "data/output"
+
+columns:
+  date: "Date"
+  description: "Narration"
+  reference: "Chq./Ref.No."
+  value_date: "Value Dt"
+  debit: "Withdrawal Amt."
+  credit: "Deposit Amt."
+  balance: "Closing Balance"
+
+date_format: "%d/%m/%y"
+
+categories:
+  Utilities (BESCOM/Water):
+    - "bescom"
+    - "waterbill"
+    - "water bill"
+    - "watertanker"
+    - "tanker"
+  STP / Plumbing:
+    - "stp"
+    - "plumb"
+    - "sewage"
+  Electrical:
+    - "electrical"
+    - "electric"
+    - "motor"
+  Solar:
+    - "solar"
+    - "plussolar"
+  Gardening:
+    - "garden"
+    - "gardner"
+    - "gardener"
+  Fuel / DG:
+    - "fuel"
+    - "gowrishankar"
+  Garbage / Waste:
+    - "garbage"
+    - "waste"
+    - "tractor"
+  Telecom:
+    - "airtel"
+    - "si hg"
+  Bank Charges:
+    - "chgs"
+    - "charges"
+    - "gst"
+    - "cash wdl"
+  Salary / Vendor:
+    - "anjane"
+    - "stp june"
+    - "salary"
