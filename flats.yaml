@@ -1,0 +1,1601 @@
+meta:
+  last_updated: '2026-07-20'
+  description: Nava Vaibhva flat registry — SBA dimensions + bank statement payers only
+  total_flats: 200
+  maintenance_rate_per_sqft: 2.5
+  sources:
+  - Flat dimension table (FLAT NO / SBA SQFT) — committee reference
+  - HDFC Acct_Statement_June2026.xls — payer names from credit transactions
+  - HDFC Acct_Statement_XXXXXXXX2118_05062026.xls — payer names from credit transactions
+  blocks:
+    A:
+      label: A-Block
+      flats: 80
+    B:
+      label: B-Block
+      flats: 48
+    C:
+      label: C-Block
+      flats: 72
+  statements_processed:
+  - 2026-05
+  - 2026-06
+flats:
+  A001:
+    block: A
+    sqft: 1172
+    payer_names:
+    - PRAMIT PANDA
+    notes: ''
+  A002:
+    block: A
+    sqft: 1096
+    payer_names: []
+    notes: ''
+  A003:
+    block: A
+    sqft: 1096
+    payer_names:
+    - NETHRAVATHI  S
+    notes: ''
+  A004:
+    block: A
+    sqft: 1302
+    payer_names:
+    - LOKESH SETTY
+    notes: ''
+  A005:
+    block: A
+    sqft: 1149
+    payer_names: []
+    notes: ''
+  A006:
+    block: A
+    sqft: 1118
+    payer_names:
+    - SOMASHEKAR PATIL
+    notes: ''
+  A007:
+    block: A
+    sqft: 1106
+    payer_names: []
+    notes: ''
+  A008:
+    block: A
+    sqft: 1547
+    payer_names:
+    - CHENNAMADHAVUNIABHINAY
+    notes: ''
+  A009:
+    block: A
+    sqft: 1552
+    payer_names:
+    - ARUN BALAGOPAL
+    notes: ''
+  A010:
+    block: A
+    sqft: 1154
+    payer_names:
+    - EBIN KANAGA JOZER
+    notes: ''
+  A011:
+    block: A
+    sqft: 1118
+    payer_names:
+    - ASHWIN KOTEBAVI
+    notes: ''
+  A012:
+    block: A
+    sqft: 1086
+    payer_names:
+    - BISWAJIT BURAGOHAIN
+    notes: ''
+  A013:
+    block: A
+    sqft: 1189
+    payer_names:
+    - DORA RAGHAVENDRA VINAY NAGARI
+    notes: ''
+  A014:
+    block: A
+    sqft: 1110
+    payer_names: []
+    notes: ''
+  A015:
+    block: A
+    sqft: 1260
+    payer_names: []
+    notes: ''
+  A016:
+    block: A
+    sqft: 1110
+    payer_names:
+    - RAKSHITH M
+    notes: ''
+  A017:
+    block: A
+    sqft: 1260
+    payer_names: []
+    notes: ''
+  A018:
+    block: A
+    sqft: 1110
+    payer_names:
+    - DEEPAKKUMARMAHATO
+    notes: ''
+  A019:
+    block: A
+    sqft: 1264
+    payer_names:
+    - GYANUBA URANAKAR
+    notes: ''
+  A020:
+    block: A
+    sqft: 1110
+    payer_names:
+    - M H MAHALENGAM
+    notes: ''
+  A101:
+    block: A
+    sqft: 1172
+    payer_names:
+    - SHARATH CHANDRAN
+    notes: ''
+  A102:
+    block: A
+    sqft: 1192
+    payer_names: []
+    notes: ''
+  A103:
+    block: A
+    sqft: 1192
+    payer_names: []
+    notes: ''
+  A104:
+    block: A
+    sqft: 1424
+    payer_names: []
+    notes: ''
+  A105:
+    block: A
+    sqft: 1210
+    payer_names:
+    - ANNATAM DEY
+    notes: ''
+  A106:
+    block: A
+    sqft: 1118
+    payer_names:
+    - T JAYACHANDRAN
+    notes: ''
+  A107:
+    block: A
+    sqft: 1232
+    payer_names: []
+    notes: ''
+  A108:
+    block: A
+    sqft: 1547
+    payer_names:
+    - SUBHASCHANDRA SHIRIY
+    notes: ''
+  A109:
+    block: A
+    sqft: 1552
+    payer_names: []
+    notes: ''
+  A110:
+    block: A
+    sqft: 1212
+    payer_names:
+    - PAVEENA K
+    notes: ''
+  A111:
+    block: A
+    sqft: 1178
+    payer_names: []
+    notes: ''
+  A112:
+    block: A
+    sqft: 1144
+    payer_names: []
+    notes: ''
+  A113:
+    block: A
+    sqft: 1189
+    payer_names:
+    - SOUMYARANJAN MOHAPATRA
+    notes: ''
+  A114:
+    block: A
+    sqft: 1168
+    payer_names: []
+    notes: ''
+  A115:
+    block: A
+    sqft: 1260
+    payer_names: []
+    notes: ''
+  A116:
+    block: A
+    sqft: 1228
+    payer_names: []
+    notes: ''
+  A117:
+    block: A
+    sqft: 1260
+    payer_names: []
+    notes: ''
+  A118:
+    block: A
+    sqft: 1228
+    payer_names:
+    - SAIKUMARGUNNA
+    notes: ''
+  A119:
+    block: A
+    sqft: 1264
+    payer_names: []
+    notes: ''
+  A120:
+    block: A
+    sqft: 1228
+    payer_names:
+    - SAUMYA RANJAN MOHAPATRA
+    notes: ''
+  A201:
+    block: A
+    sqft: 1172
+    payer_names:
+    - KAVYAK BABU ANUMUKONDA
+    notes: ''
+  A202:
+    block: A
+    sqft: 1192
+    payer_names: []
+    notes: ''
+  A203:
+    block: A
+    sqft: 1192
+    payer_names: []
+    notes: ''
+  A204:
+    block: A
+    sqft: 1424
+    payer_names: []
+    notes: ''
+  A205:
+    block: A
+    sqft: 1210
+    payer_names:
+    - LOVELYKANT
+    notes: ''
+  A206:
+    block: A
+    sqft: 1118
+    payer_names: []
+    notes: ''
+  A207:
+    block: A
+    sqft: 1232
+    payer_names:
+    - BAISHNABI SAHU
+    notes: ''
+  A208:
+    block: A
+    sqft: 1547
+    payer_names: []
+    notes: ''
+  A209:
+    block: A
+    sqft: 1552
+    payer_names:
+    - KIRAN KUMAR BARLA
+    notes: ''
+  A210:
+    block: A
+    sqft: 1212
+    payer_names: []
+    notes: ''
+  A211:
+    block: A
+    sqft: 1178
+    payer_names: []
+    notes: ''
+  A212:
+    block: A
+    sqft: 1144
+    payer_names:
+    - YASH SINHA
+    notes: ''
+  A213:
+    block: A
+    sqft: 1189
+    payer_names:
+    - SIDHARTH P
+    notes: ''
+  A214:
+    block: A
+    sqft: 1168
+    payer_names:
+    - K B MOHAN
+    notes: ''
+  A215:
+    block: A
+    sqft: 1260
+    payer_names:
+    - SANDEEP ANTHUR
+    notes: ''
+  A216:
+    block: A
+    sqft: 1228
+    payer_names: []
+    notes: ''
+  A217:
+    block: A
+    sqft: 1260
+    payer_names: []
+    notes: ''
+  A218:
+    block: A
+    sqft: 1228
+    payer_names:
+    - MR HARSH  VATS
+    notes: ''
+  A219:
+    block: A
+    sqft: 1264
+    payer_names: []
+    notes: ''
+  A220:
+    block: A
+    sqft: 1228
+    payer_names: []
+    notes: ''
+  A301:
+    block: A
+    sqft: 1172
+    payer_names:
+    - BHASKARUNI SWAROOP
+    notes: ''
+  A302:
+    block: A
+    sqft: 1192
+    payer_names:
+    - ARCHIT JAIN
+    notes: ''
+  A303:
+    block: A
+    sqft: 1192
+    payer_names: []
+    notes: ''
+  A304:
+    block: A
+    sqft: 1424
+    payer_names:
+    - GOUTAM B K
+    notes: ''
+  A305:
+    block: A
+    sqft: 1210
+    payer_names:
+    - SUYASH SHRESTHA
+    notes: ''
+  A306:
+    block: A
+    sqft: 1118
+    payer_names:
+    - VIJAYAKUMAR RAJU  SO
+    notes: ''
+  A307:
+    block: A
+    sqft: 1232
+    payer_names:
+    - K  MUKUNTH
+    notes: ''
+  A308:
+    block: A
+    sqft: 1547
+    payer_names:
+    - MALLAVARAPU AROGYA MARY
+    - PUDOTARAJIVRAICHOWDARI
+    notes: ''
+  A309:
+    block: A
+    sqft: 1552
+    payer_names:
+    - NSEETHARAM
+    notes: ''
+  A310:
+    block: A
+    sqft: 1212
+    payer_names: []
+    notes: ''
+  A311:
+    block: A
+    sqft: 1178
+    payer_names:
+    - ANN JOVITA JAMES
+    notes: ''
+  A312:
+    block: A
+    sqft: 1144
+    payer_names: []
+    notes: ''
+  A313:
+    block: A
+    sqft: 1189
+    payer_names:
+    - VIVEKANANDA SHARMA
+    notes: ''
+  A314:
+    block: A
+    sqft: 1168
+    payer_names: []
+    notes: ''
+  A315:
+    block: A
+    sqft: 1260
+    payer_names: []
+    notes: ''
+  A316:
+    block: A
+    sqft: 1228
+    payer_names:
+    - ANU RAJ T
+    notes: ''
+  A317:
+    block: A
+    sqft: 1260
+    payer_names:
+    - D  VIVEK
+    - D VIVEKMANDULA SUPRI
+    notes: ''
+  A318:
+    block: A
+    sqft: 1228
+    payer_names: []
+    notes: ''
+  A319:
+    block: A
+    sqft: 1264
+    payer_names: []
+    notes: ''
+  A320:
+    block: A
+    sqft: 1228
+    payer_names:
+    - MANU N
+    notes: ''
+  B001:
+    block: B
+    sqft: 1128
+    payer_names: []
+    notes: ''
+  B002:
+    block: B
+    sqft: 1518
+    payer_names: []
+    notes: ''
+  B003:
+    block: B
+    sqft: 1104
+    payer_names:
+    - YERUSU JANARDHANA REDDY
+    notes: ''
+  B004:
+    block: B
+    sqft: 1104
+    payer_names: []
+    notes: ''
+  B005:
+    block: B
+    sqft: 1104
+    payer_names: []
+    notes: ''
+  B006:
+    block: B
+    sqft: 1121
+    payer_names: []
+    notes: ''
+  B007:
+    block: B
+    sqft: 1336
+    payer_names: []
+    notes: ''
+  B008:
+    block: B
+    sqft: 1104
+    payer_names: []
+    notes: ''
+  B009:
+    block: B
+    sqft: 1325
+    payer_names:
+    - BALASUBRAMANYA S
+    - NAGESH KURAVADI
+    notes: ''
+  B010:
+    block: B
+    sqft: 1355
+    payer_names:
+    - HAREESH V
+    notes: ''
+  B011:
+    block: B
+    sqft: 1179
+    payer_names: []
+    notes: ''
+  B012:
+    block: B
+    sqft: 1108
+    payer_names: []
+    notes: ''
+  B101:
+    block: B
+    sqft: 1244
+    payer_names:
+    - RAGHAVENDRAN KANNAN
+    notes: ''
+  B102:
+    block: B
+    sqft: 1518
+    payer_names: []
+    notes: ''
+  B103:
+    block: B
+    sqft: 1104
+    payer_names:
+    - PRASHANTKUMARDASH
+    notes: ''
+  B104:
+    block: B
+    sqft: 1104
+    payer_names: []
+    notes: ''
+  B105:
+    block: B
+    sqft: 1104
+    payer_names:
+    - SANTHANAM KRISHNAN
+    notes: ''
+  B106:
+    block: B
+    sqft: 1121
+    payer_names:
+    - NAGENDRA KUMAR
+    notes: ''
+  B107:
+    block: B
+    sqft: 1402
+    payer_names: []
+    notes: ''
+  B108:
+    block: B
+    sqft: 1228
+    payer_names: []
+    notes: ''
+  B109:
+    block: B
+    sqft: 1605
+    payer_names: []
+    notes: ''
+  B110:
+    block: B
+    sqft: 1564
+    payer_names:
+    - P MANOJ PRABHANJAN
+    notes: ''
+  B111:
+    block: B
+    sqft: 1286
+    payer_names:
+    - DHIRAJ KUMAR
+    notes: ''
+  B112:
+    block: B
+    sqft: 1281
+    payer_names: []
+    notes: ''
+  B201:
+    block: B
+    sqft: 1244
+    payer_names: []
+    notes: ''
+  B202:
+    block: B
+    sqft: 1518
+    payer_names: []
+    notes: ''
+  B203:
+    block: B
+    sqft: 1104
+    payer_names:
+    - KRISHNAKUMAR
+    notes: ''
+  B204:
+    block: B
+    sqft: 1104
+    payer_names:
+    - TARKESHWAR P VISHVAKARMA
+    notes: ''
+  B205:
+    block: B
+    sqft: 1104
+    payer_names: []
+    notes: ''
+  B206:
+    block: B
+    sqft: 1121
+    payer_names:
+    - SAIRAMNANDULA
+    notes: ''
+  B207:
+    block: B
+    sqft: 1402
+    payer_names:
+    - ASHWINDOSS
+    notes: ''
+  B208:
+    block: B
+    sqft: 1228
+    payer_names: []
+    notes: ''
+  B209:
+    block: B
+    sqft: 1605
+    payer_names:
+    - P NIHAARIKA
+    notes: ''
+  B210:
+    block: B
+    sqft: 1564
+    payer_names:
+    - GOWRISHANKAR  PALANI
+    notes: ''
+  B211:
+    block: B
+    sqft: 1286
+    payer_names:
+    - MUGUNDHAN  .
+    notes: ''
+  B212:
+    block: B
+    sqft: 1281
+    payer_names: []
+    notes: ''
+  B301:
+    block: B
+    sqft: 1244
+    payer_names:
+    - SUBHANKAR SINHA MAHAPATRA
+    notes: ''
+  B302:
+    block: B
+    sqft: 1518
+    payer_names: []
+    notes: ''
+  B303:
+    block: B
+    sqft: 1104
+    payer_names:
+    - KUSUM PODDAR
+    notes: ''
+  B304:
+    block: B
+    sqft: 1104
+    payer_names:
+    - PUNEETH KUMAR KOLLIPARA
+    notes: ''
+  B305:
+    block: B
+    sqft: 1104
+    payer_names:
+    - DICHPALLY RAJASHEKAR
+    notes: ''
+  B306:
+    block: B
+    sqft: 1121
+    payer_names:
+    - GANAPATI RANGANATH S
+    notes: ''
+  B307:
+    block: B
+    sqft: 1402
+    payer_names:
+    - VIVEK DILAWARI
+    notes: ''
+  B308:
+    block: B
+    sqft: 1228
+    payer_names:
+    - TANYA RUBY
+    notes: ''
+  B309:
+    block: B
+    sqft: 1605
+    payer_names: []
+    notes: ''
+  B310:
+    block: B
+    sqft: 1564
+    payer_names:
+    - LYDIA VANDANA CUTINHA
+    notes: ''
+  B311:
+    block: B
+    sqft: 1286
+    payer_names:
+    - AMPOLU CHANDRASEKHARARAO
+    notes: ''
+  B312:
+    block: B
+    sqft: 1281
+    payer_names:
+    - A A DEVARAJ
+    notes: ''
+  C001:
+    block: C
+    sqft: 1081
+    payer_names:
+    - DEVENDRA SINGH BOHRA G
+    notes: ''
+  C002:
+    block: C
+    sqft: 1101
+    payer_names:
+    - PARTHASARATHY SIVAKUMAR
+    notes: ''
+  C003:
+    block: C
+    sqft: 1122
+    payer_names: []
+    notes: ''
+  C004:
+    block: C
+    sqft: 1101
+    payer_names:
+    - PRAVEEN KUMAR
+    notes: ''
+  C005:
+    block: C
+    sqft: 1411
+    payer_names:
+    - VISHALAKSHI P
+    notes: ''
+  C006:
+    block: C
+    sqft: 1431
+    payer_names:
+    - SANTOSH KUMAR K
+    notes: ''
+  C007:
+    block: C
+    sqft: 1425
+    payer_names: []
+    notes: ''
+  C008:
+    block: C
+    sqft: 1425
+    payer_names:
+    - SUSHIL KUMAR
+    notes: ''
+  C009:
+    block: C
+    sqft: 1118
+    payer_names: []
+    notes: ''
+  C010:
+    block: C
+    sqft: 1096
+    payer_names: []
+    notes: ''
+  C011:
+    block: C
+    sqft: 1096
+    payer_names: []
+    notes: ''
+  C012:
+    block: C
+    sqft: 1096
+    payer_names:
+    - MARY SHASHIKALA
+    notes: ''
+  C013:
+    block: C
+    sqft: 1172
+    payer_names: []
+    notes: ''
+  C014:
+    block: C
+    sqft: 1192
+    payer_names:
+    - SUDHEESH S
+    notes: ''
+  C015:
+    block: C
+    sqft: 1192
+    payer_names:
+    - BALAKRISHNA  PALAVAL
+    notes: ''
+  C016:
+    block: C
+    sqft: 1323
+    payer_names:
+    - MANJUNATH PAI
+    notes: ''
+  C017:
+    block: C
+    sqft: 1247
+    payer_names:
+    - MYLA SAI KIRAN BABU
+    notes: ''
+  C018:
+    block: C
+    sqft: 1247
+    payer_names: []
+    notes: ''
+  C101:
+    block: C
+    sqft: 1220
+    payer_names:
+    - VIGNESH MOHANDAS
+    notes: ''
+  C102:
+    block: C
+    sqft: 1240
+    payer_names: []
+    notes: ''
+  C103:
+    block: C
+    sqft: 1265
+    payer_names:
+    - MUKESH N
+    notes: ''
+  C104:
+    block: C
+    sqft: 1240
+    payer_names: []
+    notes: ''
+  C105:
+    block: C
+    sqft: 1625
+    payer_names:
+    - SURAJ SHRIKANT BHOMK
+    notes: ''
+  C106:
+    block: C
+    sqft: 1578
+    payer_names: []
+    notes: ''
+  C107:
+    block: C
+    sqft: 1571
+    payer_names: []
+    notes: ''
+  C108:
+    block: C
+    sqft: 1639
+    payer_names:
+    - AKASH R
+    notes: ''
+  C109:
+    block: C
+    sqft: 1260
+    payer_names:
+    - NAVEEN BODAPATI
+    notes: ''
+  C110:
+    block: C
+    sqft: 1235
+    payer_names:
+    - MAHESH D DHARESHWAR
+    notes: ''
+  C111:
+    block: C
+    sqft: 1235
+    payer_names:
+    - SIDDALINGAYYA S H
+    notes: ''
+  C112:
+    block: C
+    sqft: 1235
+    payer_names:
+    - KARTHIKA DEVI N
+    notes: ''
+  C113:
+    block: C
+    sqft: 1172
+    payer_names:
+    - PHANI PRADEEP KUMAR
+    notes: ''
+  C114:
+    block: C
+    sqft: 1192
+    payer_names: []
+    notes: ''
+  C115:
+    block: C
+    sqft: 1192
+    payer_names: []
+    notes: ''
+  C116:
+    block: C
+    sqft: 1323
+    payer_names:
+    - CHETAN PATIL
+    notes: ''
+  C117:
+    block: C
+    sqft: 1247
+    payer_names: []
+    notes: ''
+  C118:
+    block: C
+    sqft: 1247
+    payer_names:
+    - RAMAKRISHNAMUDADLA
+    notes: ''
+  C201:
+    block: C
+    sqft: 1220
+    payer_names:
+    - LAXMI VAIJAPPA MAGEN
+    notes: ''
+  C202:
+    block: C
+    sqft: 1240
+    payer_names: []
+    notes: ''
+  C203:
+    block: C
+    sqft: 1265
+    payer_names: []
+    notes: ''
+  C204:
+    block: C
+    sqft: 1240
+    payer_names: []
+    notes: ''
+  C205:
+    block: C
+    sqft: 1625
+    payer_names:
+    - MOHAMMED AMEEN
+    notes: ''
+  C206:
+    block: C
+    sqft: 1578
+    payer_names: []
+    notes: ''
+  C207:
+    block: C
+    sqft: 1571
+    payer_names:
+    - T KIRAN KUMAR DORA
+    notes: ''
+  C208:
+    block: C
+    sqft: 1639
+    payer_names:
+    - RUMIT B PATEL
+    notes: ''
+  C209:
+    block: C
+    sqft: 1260
+    payer_names: []
+    notes: ''
+  C210:
+    block: C
+    sqft: 1235
+    payer_names:
+    - ANWAY BANERJEE
+    notes: ''
+  C211:
+    block: C
+    sqft: 1235
+    payer_names:
+    - ODUGU SIDDHARTHA
+    notes: ''
+  C212:
+    block: C
+    sqft: 1235
+    payer_names:
+    - MURALI KRISHNA BALE
+    notes: ''
+  C213:
+    block: C
+    sqft: 1172
+    payer_names: []
+    notes: ''
+  C214:
+    block: C
+    sqft: 1192
+    payer_names:
+    - NISHANT GAURAV
+    notes: ''
+  C215:
+    block: C
+    sqft: 1192
+    payer_names:
+    - PAVITHRA RAVI
+    notes: ''
+  C216:
+    block: C
+    sqft: 1323
+    payer_names:
+    - VINAYAK B BALEKAI
+    notes: ''
+  C217:
+    block: C
+    sqft: 1247
+    payer_names: []
+    notes: ''
+  C218:
+    block: C
+    sqft: 1247
+    payer_names: []
+    notes: ''
+  C301:
+    block: C
+    sqft: 1220
+    payer_names:
+    - LOVEKESH KUMAR
+    notes: ''
+  C302:
+    block: C
+    sqft: 1240
+    payer_names: []
+    notes: ''
+  C303:
+    block: C
+    sqft: 1265
+    payer_names:
+    - RAJESH BHARTI
+    notes: ''
+  C304:
+    block: C
+    sqft: 1240
+    payer_names:
+    - VIJAY KUMAR POLISETT
+    notes: ''
+  C305:
+    block: C
+    sqft: 1625
+    payer_names: []
+    notes: ''
+  C306:
+    block: C
+    sqft: 1578
+    payer_names: []
+    notes: ''
+  C307:
+    block: C
+    sqft: 1571
+    payer_names:
+    - GAURAV KUMAR
+    notes: ''
+  C308:
+    block: C
+    sqft: 1639
+    payer_names:
+    - DINESH KUMAR
+    notes: ''
+  C309:
+    block: C
+    sqft: 1260
+    payer_names:
+    - SUSHILKUMAR
+    notes: ''
+  C310:
+    block: C
+    sqft: 1235
+    payer_names: []
+    notes: ''
+  C311:
+    block: C
+    sqft: 1235
+    payer_names:
+    - GAURAV PANDEY
+    notes: ''
+  C312:
+    block: C
+    sqft: 1235
+    payer_names: []
+    notes: ''
+  C313:
+    block: C
+    sqft: 1172
+    payer_names:
+    - BHEEMAPPA BHOVI
+    notes: ''
+  C314:
+    block: C
+    sqft: 1192
+    payer_names: []
+    notes: ''
+  C315:
+    block: C
+    sqft: 1192
+    payer_names: []
+    notes: ''
+  C316:
+    block: C
+    sqft: 1323
+    payer_names:
+    - ASHWITH KUMAR V R
+    notes: ''
+  C317:
+    block: C
+    sqft: 1247
+    payer_names:
+    - YASHAS J N
+    notes: ''
+  C318:
+    block: C
+    sqft: 1247
+    payer_names:
+    - TEJAS J N
+    notes: ''
+unmapped_payers:
+  description: Payers in bank credits with no flat in narration — add to flats.<FLAT>.payer_names once
+    confirmed
+  entries:
+  - name: PRANJAL ARABINDA MED
+    payment_count: 4
+    total_amount: 12397.0
+    seen_in:
+    - 2026-06
+  - name: KAVITHA KRISNAMURTHY
+    payment_count: 4
+    total_amount: 6623.0
+    seen_in:
+    - 2026-05
+    - 2026-06
+  - name: TANIYA KUNDU
+    payment_count: 4
+    total_amount: 7473.0
+    seen_in:
+    - 2026-05
+    - 2026-06
+  - name: SUPRATEEM DUTTA
+    payment_count: 4
+    total_amount: 6663.0
+    seen_in:
+    - 2026-05
+    - 2026-06
+  - name: SUBHASMITA PUROHIT
+    payment_count: 4
+    total_amount: 12012.0
+    seen_in:
+    - 2026-05
+  - name: ANAND IDARAMANI
+    payment_count: 3
+    total_amount: 10342.0
+    seen_in:
+    - 2026-06
+  - name: MR RAJKUMAR MILAN  S
+    payment_count: 3
+    total_amount: 7523.0
+    seen_in:
+    - 2026-05
+    - 2026-06
+  - name: SANKETH S JAIN
+    payment_count: 3
+    total_amount: 6383.0
+    seen_in:
+    - 2026-05
+    - 2026-06
+  - name: VADLAMUDI UMA RANI
+    payment_count: 3
+    total_amount: 9450.0
+    seen_in:
+    - 2026-05
+  - name: RAMAKRISHNA SURYANARAYANA RAO
+    payment_count: 3
+    total_amount: 5741.0
+    seen_in:
+    - 2026-05
+  - name: MANU N
+    payment_count: 2
+    total_amount: 3313.0
+    seen_in:
+    - 2026-06
+  - name: NITIN NIRMAL BHADOUR
+    payment_count: 2
+    total_amount: 6523.0
+    seen_in:
+    - 2026-05
+    - 2026-06
+  - name: SIVARAMKRISHNA   CHINTA
+    payment_count: 2
+    total_amount: 5984.0
+    seen_in:
+    - 2026-05
+    - 2026-06
+  - name: ARUNAKUMAR SARI
+    payment_count: 2
+    total_amount: 6699.0
+    seen_in:
+    - 2026-05
+    - 2026-06
+  - name: ARUN BABU S
+    payment_count: 2
+    total_amount: 6663.0
+    seen_in:
+    - 2026-05
+    - 2026-06
+  - name: ROSHAN KUMAR NAIK
+    payment_count: 2
+    total_amount: 6663.0
+    seen_in:
+    - 2026-05
+    - 2026-06
+  - name: DR ANIL JACOB  PURTY
+    payment_count: 2
+    total_amount: 6683.0
+    seen_in:
+    - 2026-05
+    - 2026-06
+  - name: GOUTHAM S
+    payment_count: 2
+    total_amount: 3272.0
+    seen_in:
+    - 2026-06
+  - name: SIDDHARTH AHUJA
+    payment_count: 2
+    total_amount: 8319.0
+    seen_in:
+    - 2026-05
+    - 2026-06
+  - name: MITHILESH KUMAR
+    payment_count: 2
+    total_amount: 6353.0
+    seen_in:
+    - 2026-05
+    - 2026-06
+  - name: RAKESH M R
+    payment_count: 2
+    total_amount: 10361.0
+    seen_in:
+    - 2026-05
+    - 2026-06
+  - name: KUMAR ROSHAN
+    payment_count: 2
+    total_amount: 6603.0
+    seen_in:
+    - 2026-05
+    - 2026-06
+  - name: UTSAV  PATEL
+    payment_count: 2
+    total_amount: 6763.0
+    seen_in:
+    - 2026-05
+    - 2026-06
+  - name: REGINALD FERNANDEZ
+    payment_count: 2
+    total_amount: 8053.0
+    seen_in:
+    - 2026-05
+    - 2026-06
+  - name: VAMSI KIRAN K
+    payment_count: 2
+    total_amount: 8053.0
+    seen_in:
+    - 2026-05
+    - 2026-06
+  - name: BAISHALI  RAWAT
+    payment_count: 2
+    total_amount: 6323.0
+    seen_in:
+    - 2026-05
+    - 2026-06
+  - name: BHUPENDRA HINDOCHA
+    payment_count: 2
+    total_amount: 6639.0
+    seen_in:
+    - 2026-05
+    - 2026-06
+  - name: SURESH GUJJAR
+    payment_count: 2
+    total_amount: 6303.0
+    seen_in:
+    - 2026-05
+    - 2026-06
+  - name: AMALA PRAMILA SHALINI JOHN
+    payment_count: 2
+    total_amount: 6103.0
+    seen_in:
+    - 2026-05
+    - 2026-06
+  - name: ANKITA KOUL
+    payment_count: 2
+    total_amount: 6423.0
+    seen_in:
+    - 2026-05
+    - 2026-06
+  - name: SUNIL KUMAR M
+    payment_count: 2
+    total_amount: 6623.0
+    seen_in:
+    - 2026-05
+    - 2026-06
+  - name: VINOD R PAI
+    payment_count: 2
+    total_amount: 6421.0
+    seen_in:
+    - 2026-05
+    - 2026-06
+  - name: NAVA VAIBHAVA RESIDENTS WELFARE ASS
+    payment_count: 2
+    total_amount: 7065.0
+    seen_in:
+    - 2026-05
+    - 2026-06
+  - name: S R RAMA SUBRAMANIAN
+    payment_count: 2
+    total_amount: 6032.0
+    seen_in:
+    - 2026-05
+    - 2026-06
+  - name: KRISHNA V
+    payment_count: 2
+    total_amount: 3330.0
+    seen_in:
+    - 2026-06
+  - name: SASIDHAR DEVI
+    payment_count: 2
+    total_amount: 5983.0
+    seen_in:
+    - 2026-05
+    - 2026-06
+  - name: MR RAGHU SRINIVASAN
+    payment_count: 2
+    total_amount: 6783.0
+    seen_in:
+    - 2026-05
+    - 2026-06
+  - name: GEETHA B
+    payment_count: 2
+    total_amount: 6603.0
+    seen_in:
+    - 2026-05
+    - 2026-06
+  - name: SANTHANAM KRISHNAN
+    payment_count: 2
+    total_amount: 3002.0
+    seen_in:
+    - 2026-06
+  - name: P SURESH BABU
+    payment_count: 2
+    total_amount: 6359.0
+    seen_in:
+    - 2026-05
+    - 2026-06
+  - name: B RAJESH
+    payment_count: 2
+    total_amount: 8353.0
+    seen_in:
+    - 2026-05
+    - 2026-06
+  - name: MR MANIKANTA D R
+    payment_count: 2
+    total_amount: 6069.0
+    seen_in:
+    - 2026-05
+    - 2026-06
+  - name: VARUNA KAKATHKAR
+    payment_count: 2
+    total_amount: 8223.0
+    seen_in:
+    - 2026-05
+  - name: MR KADIM SATISH KUMA
+    payment_count: 2
+    total_amount: 8353.0
+    seen_in:
+    - 2026-05
+  - name: SIDHARTH P
+    payment_count: 2
+    total_amount: 6458.0
+    seen_in:
+    - 2026-05
+  - name: V  KRISHNA
+    payment_count: 2
+    total_amount: 3309.0
+    seen_in:
+    - 2026-05
+  - name: VIJAYAKUMAR RAJU  SO
+    payment_count: 2
+    total_amount: 3016.0
+    seen_in:
+    - 2026-05
+  - name: PRAVEEN  K
+    payment_count: 2
+    total_amount: 6832.0
+    seen_in:
+    - 2026-05
+  - name: KRISHNARAJU B
+    payment_count: 1
+    total_amount: 3392.0
+    seen_in:
+    - 2026-06
+  - name: NSEETHARAM
+    payment_count: 1
+    total_amount: 4122.0
+    seen_in:
+    - 2026-06
+  - name: GYANUBA URANAKAR
+    payment_count: 1
+    total_amount: 3402.0
+    seen_in:
+    - 2026-06
+  - name: KAMESHWARAN M
+    payment_count: 1
+    total_amount: 8940.0
+    seen_in:
+    - 2026-06
+  - name: YASH SINHA
+    payment_count: 1
+    total_amount: 242.0
+    seen_in:
+    - 2026-06
+  - name: ARCHIT JAIN
+    payment_count: 1
+    total_amount: 2945.0
+    seen_in:
+    - 2026-06
+  - name: PAVEENA K
+    payment_count: 1
+    total_amount: 3272.0
+    seen_in:
+    - 2026-06
+  - name: WHITE SPACE BOUTIQUE
+    payment_count: 1
+    total_amount: 2740.0
+    seen_in:
+    - 2026-06
+  - name: NISHANT GAURAV
+    payment_count: 1
+    total_amount: 3222.0
+    seen_in:
+    - 2026-06
+  - name: BHASKARUNI SWAROOP
+    payment_count: 1
+    total_amount: 3172.0
+    seen_in:
+    - 2026-06
+  - name: ROMMALA GANAVI
+    payment_count: 1
+    total_amount: 6423.0
+    seen_in:
+    - 2026-06
+  - name: EARESH KUMAR L
+    payment_count: 1
+    total_amount: 3312.0
+    seen_in:
+    - 2026-06
+  - name: SHYAM SINGH
+    payment_count: 1
+    total_amount: 32500.0
+    seen_in:
+    - 2026-06
+  - name: SAILESH BOHRA
+    payment_count: 1
+    total_amount: 6073.0
+    seen_in:
+    - 2026-06
+  - name: SRINIVAS M A
+    payment_count: 1
+    total_amount: 2790.0
+    seen_in:
+    - 2026-06
+  - name: SANTOSH KUMAR K
+    payment_count: 1
+    total_amount: 3798.0
+    seen_in:
+    - 2026-05
+  - name: DEEPAKKUMARMAHATO
+    payment_count: 1
+    total_amount: 2996.0
+    seen_in:
+    - 2026-05
+  - name: DICHPALLY RAJASHEKAR
+    payment_count: 1
+    total_amount: 2983.0
+    seen_in:
+    - 2026-05
+  - name: SIVARAMAN M
+    payment_count: 1
+    total_amount: 3201.0
+    seen_in:
+    - 2026-05
+  - name: PRASHANT KUMAR DASH
+    payment_count: 1
+    total_amount: 10000.0
+    seen_in:
+    - 2026-05
+  - name: USHA  DEVI
+    payment_count: 1
+    total_amount: 4234.0
+    seen_in:
+    - 2026-05
+  - name: VEENA M
+    payment_count: 1
+    total_amount: 6838.0
+    seen_in:
+    - 2026-05
+  - name: MARY SHASHIKALA
+    payment_count: 1
+    total_amount: 2961.0
+    seen_in:
+    - 2026-05
+  - name: MILAN KUILA
+    payment_count: 1
+    total_amount: 3291.0
+    seen_in:
+    - 2026-05
+  - name: VADLAMUDIUMARANI
+    payment_count: 1
+    total_amount: 3150.0
+    seen_in:
+    - 2026-05
+  - name: GOWRISHANKAR PALANIMUTHU
+    payment_count: 1
+    total_amount: 4131.0
+    seen_in:
+    - 2026-05
+  - name: LOVELY  KANT
+    payment_count: 1
+    total_amount: 3246.0
+    seen_in:
+    - 2026-05
+  - name: BISWAJIT BURAGOHAIN
+    payment_count: 1
+    total_amount: 3021.0
+    seen_in:
+    - 2026-05
+  - name: SRINIVASA V S
+    payment_count: 1
+    total_amount: 600.0
+    seen_in:
+    - 2026-05
+  - name: ASHWINDOSS
+    payment_count: 1
+    total_amount: 3226.0
+    seen_in:
+    - 2026-05
+  - name: EARESH KUMAR  L
+    payment_count: 1
+    total_amount: 3291.0
+    seen_in:
+    - 2026-05
+  - name: GANAPATI RANGANATH S
+    payment_count: 1
+    total_amount: 3024.0
+    seen_in:
+    - 2026-05
+  - name: DEVARAJ  R
+    payment_count: 1
+    total_amount: 2860.0
+    seen_in:
+    - 2026-05
+  - name: AJITAV DUTTA
+    payment_count: 1
+    total_amount: 4284.0
+    seen_in:
+    - 2026-05
+  - name: MS SANJEVENI CONSTRU
+    payment_count: 1
+    total_amount: 5960.0
+    seen_in:
+    - 2026-05
+  - name: SUBRAT  SAMANTRAY
+    payment_count: 1
+    total_amount: 2991.0
+    seen_in:
+    - 2026-05
+  - name: AKSHAR GHANSHYAMBHAI BAROT
+    payment_count: 1
+    total_amount: 6812.0
+    seen_in:
+    - 2026-05

@@ -19,6 +19,8 @@ class Config:
     date_format: str
     categories: dict[str, list[str]] = field(default_factory=dict)
     bank: str = "hdfc"
+    flats_registry_path: Path | None = None
+    flat_dimensions_path: Path = Path("flat_dimensions.yaml")
 
     @classmethod
     def load(cls, path: Path) -> "Config":
@@ -27,6 +29,8 @@ class Config:
 
         society = raw.get("society", {})
         paths = raw.get("paths", {})
+        flats_registry = raw.get("flats_registry")
+        flat_dimensions = raw.get("flat_dimensions", "flat_dimensions.yaml")
         return cls(
             society_name=society.get("name", "Nava Vaibhva"),
             short_name=society.get("short_name", "Nava Vaibhva"),
@@ -36,4 +40,6 @@ class Config:
             date_format=raw.get("date_format", "%d/%m/%Y"),
             categories=raw.get("categories", {}),
             bank=raw.get("bank", "hdfc"),
+            flats_registry_path=Path(flats_registry) if flats_registry else None,
+            flat_dimensions_path=Path(flat_dimensions),
         )

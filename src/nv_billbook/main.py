@@ -8,6 +8,7 @@ from pathlib import Path
 
 from nv_billbook.classifier import classify_transactions, split_by_type
 from nv_billbook.config import Config
+from nv_billbook.flats_registry import FlatsRegistry
 from nv_billbook.parser import (
     find_statement_files,
     infer_report_month,
@@ -55,7 +56,26 @@ def _resolve_input_paths(config: Config, input_arg: str | None) -> list[Path]:
     return find_statement_files(config.input_dir)
 
 
-def _process_statement(path: Path, config: Config, month_filter: str | None) -> Path | None:
+def _load_flats_registry(config: Config) -> FlatsRegistry | None:
+    if not config.flats_registry_path:
+        return None
+    path = config.flats_registry_path
+    if not path.is_absolute():
+        path = Path.cwd() / path
+    if not path.exists():
+        print(f"Warning: flats registry not found at {path} — continuing without it")
+        return None
+
+    dim_path = config.flat_dimensions_path
+    if not dim_path.is_absolute():
+        dim_path = Path.cwd() / dim_path
+
+    registry = FlatsRegistry.load(path, dimensions_path=dim_path if dim_path.exists() else None)
+    print(f"Loaded flats registry: {len(registry.flats)} flats")
+    return registry
+
+
+def _process_statement(path: Path, config: Config, month_filter: str | None, flats_registry: FlatsRegistry | None) -> Path | None:
     print(f"Processing: {path.name}")
     parsed = parse_hdfc_statement(path, config)
     report_month = infer_report_month(parsed.meta, parsed.transactions)
@@ -64,7 +84,7 @@ def _process_statement(path: Path, config: Config, month_filter: str | None) -> 
         print(f"  Skipped (statement month {report_month} != requested {month_filter})")
         return None
 
-    classified = classify_transactions(parsed.transactions, config)
+    classified = classify_transactions(parsed.transactions, config, flats_registry)
     split = split_by_type(classified)
     output_path = write_monthly_report(parsed, split, config, report_month)
 
@@ -96,6 +116,7 @@ def main() -> None:
         sys.exit(1)
 
     config = Config.load(config_path)
+    flats_registry = _load_flats_registry(config)
     month_filter = args.month if not args.all else None
 
     try:
@@ -111,7 +132,7 @@ def main() -> None:
     generated: list[Path] = []
     for path in input_paths:
         try:
-            output = _process_statement(path, config, month_filter)
+            output = _process_statement(path, config, month_filter, flats_registry)
             if output:
                 generated.append(output)
         except Exception as exc:

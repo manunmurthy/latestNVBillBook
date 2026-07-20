@@ -59,6 +59,14 @@ def _prepare_display_frame(df: pd.DataFrame, txn_type: str) -> pd.DataFrame:
             "Category": df["category"].fillna(""),
         }
     )
+    if "sqft" in df.columns:
+        display.insert(
+            4,
+            "SBA (sqft)",
+            df["sqft"].apply(
+                lambda v: int(v) if pd.notna(v) and str(v).strip() not in ("", "nan") else ""
+            ),
+        )
 
     if txn_type == "credit":
         display["Credit (₹)"] = df["credit"]

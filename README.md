@@ -202,18 +202,94 @@ latestNVBillBook/
 ├── requirements.txt
 ├── config.yaml              # Local HDFC settings (gitignored)
 ├── config.example.yaml      # Template — safe to commit
+├── flats.yaml               # Flat registry — owner names & payer aliases
+├── flats.example.yaml       # Backup template of flat registry
 ├── data/
 │   ├── input/               # Optional: drop statement files here
 │   └── output/              # Generated Excel reports appear here
 ├── src/nv_billbook/
 │   ├── main.py              # CLI entry point
 │   ├── config.py            # Load config.yaml
+│   ├── flats_registry.py    # Flat lookup & payer alias matching
 │   ├── parser.py            # HDFC XLS parser
 │   ├── classifier.py        # Credit / debit / flat extraction
 │   └── reporter.py          # Excel workbook builder
 └── tests/
     └── test_parser.py
 ```
+
+---
+
+## Flat registry (`flats.yaml`)
+
+Reference file for all **200 flats**. Built from two sources only:
+
+1. **SBA dimension table** (FLAT NO / sqft) — your committee flat-size reference
+2. **HDFC bank statement** — payer names seen in credit transactions (June 2026 as starting point)
+
+No data is pulled from the old maintenance workbook.
+
+### What the tool uses it for
+
+- Attach **SBA (sqft)** to each credit when a flat number is known
+- Match **UPI payer names** to flats when the narration has no flat number
+- Track **`payer_names`** per flat as you confirm them from bank statements
+
+### Structure (per flat)
+
+```yaml
+flats:
+  A003:
+    block: A
+    sqft: 1095                         # from dimension table
+    payer_names:                       # from bank statement only
+      - "NETHRAVATHI  S"
+    notes: ""
+```
+
+Flats with no payments in June 2026 have an empty `payer_names: []` — fill these in over time.
+
+### Unmapped payers
+
+Payers in bank credits **without** a flat number in the narration are listed at the bottom under `unmapped_payers`. Each month:
+
+1. Check the **Credits** sheet for empty **Flat No** rows
+2. Find the payer in `unmapped_payers`
+3. Once you know the flat, add the name under that flat's `payer_names`:
+
+```yaml
+  A320:
+    sqft: 1130
+    payer_names:
+      - "MANU N"
+```
+
+4. Update `meta.last_updated` and re-run the report
+
+### SBA dimensions (`flat_dimensions.yaml`)
+
+Exact sqft per flat — sourced from **`OnlyFlatDimensions.xlsx`**. Never rounded or estimated.
+
+```yaml
+dimensions:
+  A003: 1095
+  A320: 1228
+```
+
+After editing, sync into `flats.yaml`:
+
+```bash
+python3 scripts/sync_flat_dimensions.py
+```
+
+If any sqft looks wrong, correct it in `flat_dimensions.yaml` (not in code). The tool reads the exact integer you provide.
+
+---
+
+1. Download the new HDFC statement and run the report
+2. Review new payers in **Credits** (empty Flat No column)
+3. Add confirmed payer → flat mappings to `flats.yaml`
+4. Re-run — **Flat No** and **SBA (sqft)** fill in automatically
 
 ---
 
@@ -257,7 +333,8 @@ Re-run the script after saving — no code changes needed.
 - [x] HDFC `.xls` parser with auto header detection
 - [x] Credit / debit / other classification
 - [x] Flat no & payer name extraction from UPI/TPT narrations
-- [x] Monthly Excel report (Summary, Credits, Debits, Other, All)
+- [x] Flat registry (`flats.yaml`) — 200 flats with SBA sqft + bank payer names
+- [x] Payer-to-flat matching from bank statement names only
 - [ ] PDF statement support
 - [ ] Flat-wise collection pivot (like legacy NV Maintenance workbook)
 - [ ] Multi-month comparison sheet

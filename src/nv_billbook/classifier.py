@@ -8,6 +8,7 @@ from typing import Iterable
 import pandas as pd
 
 from nv_billbook.config import Config
+from nv_billbook.flats_registry import FlatsRegistry
 
 FLAT_PATTERNS = [
     re.compile(r"\b([ABC])[- ]?(\d{3})\b", re.IGNORECASE),
@@ -159,13 +160,18 @@ def is_other_transaction(row: pd.Series) -> bool:
     return any(marker in narration for marker in other_markers)
 
 
-def classify_transactions(transactions: pd.DataFrame, config: Config) -> pd.DataFrame:
+def classify_transactions(
+    transactions: pd.DataFrame,
+    config: Config,
+    flats_registry: FlatsRegistry | None = None,
+) -> pd.DataFrame:
     """Add classification columns and split type (credit/debit/other)."""
     classified = transactions.copy()
 
     types: list[str] = []
     categories: list[str] = []
     flat_nos: list[str | None] = []
+    sqft_values: list[int | None] = []
     counterparty: list[str] = []
     purpose: list[str] = []
 
@@ -174,8 +180,9 @@ def classify_transactions(transactions: pd.DataFrame, config: Config) -> pd.Data
         if row["credit"] > 0 and row["debit"] == 0:
             txn_type = "credit"
             categories.append(extract_income_type(narration))
-            flat_nos.append(extract_flat_no(narration))
-            counterparty.append(extract_payer_name(narration))
+            payer = extract_payer_name(narration)
+            flat_no = extract_flat_no(narration)
+            counterparty.append(payer)
             purpose.append(categories[-1])
         elif row["debit"] > 0 and row["credit"] == 0:
             if is_other_transaction(row):
@@ -183,21 +190,40 @@ def classify_transactions(transactions: pd.DataFrame, config: Config) -> pd.Data
             else:
                 txn_type = "debit"
             categories.append(categorize_debit(narration, config))
-            flat_nos.append(extract_flat_no(narration))
-            counterparty.append(extract_debit_payee(narration))
+            payer = extract_debit_payee(narration)
+            flat_no = extract_flat_no(narration)
+            counterparty.append(payer)
             purpose.append(extract_debit_purpose(narration))
         else:
             txn_type = "other"
             categories.append("Uncategorized")
-            flat_nos.append(extract_flat_no(narration))
+            flat_no = extract_flat_no(narration)
+            payer = ""
             counterparty.append("")
             purpose.append(narration)
 
+        sqft_value = None
+        if flats_registry:
+            resolved_flat, flat_info = flats_registry.resolve_flat(flat_no, payer)
+            if resolved_flat and not flat_no:
+                flat_no = resolved_flat
+            if flat_info:
+                sqft_value = flat_info.sqft
+            elif flat_no:
+                info = flats_registry.get(flat_no)
+                if info:
+                    sqft_value = info.sqft
+        elif flat_no:
+            sqft_value = None
+
         types.append(txn_type)
+        flat_nos.append(flat_no)
+        sqft_values.append(sqft_value)
 
     classified["txn_type"] = types
     classified["category"] = categories
     classified["flat_no"] = flat_nos
+    classified["sqft"] = sqft_values
     classified["counterparty"] = counterparty
     classified["purpose"] = purpose
     return classified

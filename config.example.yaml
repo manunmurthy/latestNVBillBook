@@ -8,6 +8,10 @@ paths:
   input_dir: "data/input"
   output_dir: "data/output"
 
+# Flat registry — owner names, payer aliases (see flats.example.yaml)
+flats_registry: "flats.yaml"
+flat_dimensions: "flat_dimensions.yaml"
+
 columns:
   date: "Date"
   description: "Narration"
