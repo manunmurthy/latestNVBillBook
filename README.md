@@ -2,7 +2,7 @@
 
 Python tool to read **HDFC bank statements** and generate monthly Excel reports for **Nava Vaibhva Resi Welfare Association**.
 
-Download the society account statement from HDFC net banking each month, run one command, and get a ready-to-review Excel workbook with **Credits**, **Debits**, and **Other** transactions separated.
+Download the society account statement from HDFC net banking each month, run one command, and get a ready-to-review Excel workbook with transaction details and a flat-wise maintenance reconciliation.
 
 ---
 
@@ -16,7 +16,8 @@ The following is implemented and working:
 | **Credit / debit / other split** | Deposits → Credits, vendor payments → Debits, bank charges → Other |
 | **Smart extraction** | Flat no (e.g. `A003`, `B303`), payer/payee name, and purpose from UPI/TPT/NEFT narrations |
 | **Expense categories** | Auto-tags debits (STP, gardening, electrical, solar, water, fuel, garbage, telecom, etc.) |
-| **Excel report** | One workbook per month with 5 sheets (Summary, Credits, Debits, Other, All Transactions) |
+| **Maintenance reconciliation** | Calculates expected maintenance, water bill, paid amount, dues, excess, and status for every registered flat |
+| **Excel report** | One workbook per month with 6 sheets, including Maintenance Reconciliation |
 | **Flexible input** | Point to a single file, a folder, or use `data/input/` |
 
 **Verified with:** `Acct_Statement_June2026.xls` — 218 transactions processed successfully.
@@ -34,6 +35,7 @@ Output file: **`data/output/YYYY-MM_summary.xlsx`**
 | **Debits** | All payments — payee, purpose, expense category |
 | **Other** | Bank charges and unmatched entries |
 | **All Transactions** | Complete transaction list |
+| **Maintenance Reconciliation** | One row per registered flat: expected charges, payments received, amount due or extra paid, and status |
 
 ---
 
@@ -95,8 +97,11 @@ source .venv/bin/activate
 
 ```bash
 PYTHONPATH=src python3 -m nv_billbook.main \
-  --input "~/Downloads/NVBankStatements/Acct_Statement_July2026.xls"
+  --input "~/Downloads/NVBankStatements/Acct_Statement_July2026.xls" \
+  --water-bill 287
 ```
+
+`--water-bill` is the fixed per-flat water charge for this report. It overrides the fallback value in `flats.yaml`, so you can enter the current amount without editing any files.
 
 **Option B — Copy to `data/input/` and run by month:**
 
@@ -122,10 +127,10 @@ open data/output/2026-07_summary.xlsx      # macOS
 ### Step 5 — Review
 
 1. **Summary** — check opening/closing balance matches the bank statement
-2. **Credits** — verify maintenance collections; note any flat with missing payments
-3. **Debits** — confirm all vendor payments are categorised correctly
-4. **Other** — review bank charges (usually 1–2 entries)
-5. Use the data to update your main maintenance workbook if needed
+2. **Maintenance Reconciliation** — check Pending, Short, and Excess flats; confirm the water bill used for the month
+3. **Credits** — verify maintenance collections and investigate rows without a Flat No
+4. **Debits** — confirm all vendor payments are categorised correctly
+5. **Other** — review bank charges (usually 1–2 entries)
 
 ---
 
@@ -137,6 +142,7 @@ open data/output/2026-07_summary.xlsx      # macOS
 | `--input /path/to/folder/ --all` | Process all statements in a folder |
 | `--month 2026-07` | Process only files matching July 2026 (uses `data/input/`) |
 | `--config path/to/config.yaml` | Use a different config file |
+| `--water-bill 287` | Set the fixed per-flat water bill for this report; overrides `flats.yaml` |
 
 Example output when it succeeds:
 
@@ -158,6 +164,7 @@ Done. 1 report(s) created in data/output/
 [ ] Run script with --input pointing to the file
 [ ] Open data/output/YYYY-MM_summary.xlsx
 [ ] Verify Summary totals vs bank statement
+[ ] Review Maintenance Reconciliation — Pending, Short, and Excess flats
 [ ] Review Credits sheet (flat-wise collections)
 [ ] Review Debits sheet (expense categories)
 [ ] Archive statement + report for records
@@ -213,9 +220,11 @@ latestNVBillBook/
 │   ├── flats_registry.py    # Flat lookup & payer alias matching
 │   ├── parser.py            # HDFC XLS parser
 │   ├── classifier.py        # Credit / debit / flat extraction
+│   ├── reconciliation.py    # Flat-wise maintenance reconciliation logic
 │   └── reporter.py          # Excel workbook builder
 └── tests/
-    └── test_parser.py
+    ├── test_parser.py
+    └── test_reconciliation.py
 ```
 
 ---
@@ -234,6 +243,27 @@ No data is pulled from the old maintenance workbook.
 - Attach **SBA (sqft)** to each credit when a flat number is known
 - Match **UPI payer names** to flats when the narration has no flat number
 - Track **`payer_names`** per flat as you confirm them from bank statements
+- Provide the maintenance rate and fallback water bill for reconciliation
+
+### Reconciliation settings
+
+Store the standard values in `meta`:
+
+```yaml
+meta:
+  maintenance_rate_per_sqft: 2.5
+  water_bill_per_month: 287  # fallback when --water-bill is not supplied
+```
+
+For a month with a different water charge, use the command-line option instead of editing the file:
+
+```bash
+PYTHONPATH=src python3 -m nv_billbook.main \
+  --input "/full/path/to/HDFC_statement.xls" \
+  --water-bill 287
+```
+
+The reconciliation sheet calculates `Expected Maintenance = Sqft × maintenance rate`, then adds the water bill. It sums every mapped credit for the flat and assigns one of four statuses: **Paid**, **Excess**, **Short**, or **Pending**.
 
 ### Structure (per flat)
 
@@ -335,6 +365,7 @@ Re-run the script after saving — no code changes needed.
 - [x] Flat no & payer name extraction from UPI/TPT narrations
 - [x] Flat registry (`flats.yaml`) — 200 flats with SBA sqft + bank payer names
 - [x] Payer-to-flat matching from bank statement names only
+- [x] Flat-wise maintenance reconciliation worksheet
 - [ ] PDF statement support
 - [ ] Flat-wise collection pivot (like legacy NV Maintenance workbook)
 - [ ] Multi-month comparison sheet
