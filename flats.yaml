@@ -1,6 +1,7 @@
 meta:
   last_updated: '2026-07-20'
-  description: Nava Vaibhva flat registry — SBA dimensions + bank statement payers only
+  description: Nava Vaibhva flat registry — SBA dimensions + bank statement payers
+    only
   total_flats: 200
   maintenance_rate_per_sqft: 2.5
   sources:
@@ -171,7 +172,8 @@ flats:
   A107:
     block: A
     sqft: 1232
-    payer_names: []
+    payer_names:
+    - KAVITHA KRISNAMURTHY
     notes: ''
   A108:
     block: A
@@ -182,7 +184,8 @@ flats:
   A109:
     block: A
     sqft: 1552
-    payer_names: []
+    payer_names:
+    - VARUNA KAKATHKAR
     notes: ''
   A110:
     block: A
@@ -198,7 +201,8 @@ flats:
   A112:
     block: A
     sqft: 1144
-    payer_names: []
+    payer_names:
+    - SANKETH S JAIN
     notes: ''
   A113:
     block: A
@@ -209,17 +213,20 @@ flats:
   A114:
     block: A
     sqft: 1168
-    payer_names: []
+    payer_names:
+    - SURESH GUJJAR
     notes: ''
   A115:
     block: A
     sqft: 1260
-    payer_names: []
+    payer_names:
+    - AKSHAR GHANSHYAMBHAI BAROT
     notes: ''
   A116:
     block: A
     sqft: 1228
-    payer_names: []
+    payer_names:
+    - MILAN KUILA
     notes: ''
   A117:
     block: A
@@ -231,11 +238,13 @@ flats:
     sqft: 1228
     payer_names:
     - SAIKUMARGUNNA
+    - SAIKUMAR GUNNA
     notes: ''
   A119:
     block: A
     sqft: 1264
-    payer_names: []
+    payer_names:
+    - MR RAGHU SRINIVASAN
     notes: ''
   A120:
     block: A
@@ -257,7 +266,8 @@ flats:
   A203:
     block: A
     sqft: 1192
-    payer_names: []
+    payer_names:
+    - ANKITA KOUL
     notes: ''
   A204:
     block: A
@@ -284,7 +294,8 @@ flats:
   A208:
     block: A
     sqft: 1547
-    payer_names: []
+    payer_names:
+    - RANJITH MENON P V
     notes: ''
   A209:
     block: A
@@ -300,13 +311,15 @@ flats:
   A211:
     block: A
     sqft: 1178
-    payer_names: []
+    payer_names:
+    - MITHILESH KUMAR
     notes: ''
   A212:
     block: A
     sqft: 1144
     payer_names:
     - YASH SINHA
+    - SRINIVAS M A
     notes: ''
   A213:
     block: A
@@ -341,6 +354,7 @@ flats:
     sqft: 1228
     payer_names:
     - MR HARSH  VATS
+    - HARSH VATS
     notes: ''
   A219:
     block: A
@@ -350,7 +364,8 @@ flats:
   A220:
     block: A
     sqft: 1228
-    payer_names: []
+    payer_names:
+    - EARESH KUMAR L
     notes: ''
   A301:
     block: A
@@ -367,7 +382,8 @@ flats:
   A303:
     block: A
     sqft: 1192
-    payer_names: []
+    payer_names:
+    - MR RAJKUMAR MILAN  S
     notes: ''
   A304:
     block: A
@@ -399,17 +415,20 @@ flats:
     payer_names:
     - MALLAVARAPU AROGYA MARY
     - PUDOTARAJIVRAICHOWDARI
+    - PUDOTA RAJIV RAI CHO
     notes: ''
   A309:
     block: A
     sqft: 1552
     payer_names:
     - NSEETHARAM
+    - N  SEETHARAM
     notes: ''
   A310:
     block: A
     sqft: 1212
-    payer_names: []
+    payer_names:
+    - GOUTHAM S
     notes: ''
   A311:
     block: A
@@ -436,7 +455,8 @@ flats:
   A315:
     block: A
     sqft: 1260
-    payer_names: []
+    payer_names:
+    - UTSAV  PATEL
     notes: ''
   A316:
     block: A
@@ -454,7 +474,8 @@ flats:
   A318:
     block: A
     sqft: 1228
-    payer_names: []
+    payer_names:
+    - KUMAR ROSHAN
     notes: ''
   A319:
     block: A
@@ -491,7 +512,8 @@ flats:
   B005:
     block: B
     sqft: 1104
-    payer_names: []
+    payer_names:
+    - SIVARAMKRISHNACHINTA
     notes: ''
   B006:
     block: B
@@ -524,7 +546,8 @@ flats:
   B011:
     block: B
     sqft: 1179
-    payer_names: []
+    payer_names:
+    - P SURESH BABU
     notes: ''
   B012:
     block: B
@@ -551,7 +574,8 @@ flats:
   B104:
     block: B
     sqft: 1104
-    payer_names: []
+    payer_names:
+    - RAMAKRISHNA SURYANARAYANA RAO
     notes: ''
   B105:
     block: B
@@ -568,17 +592,20 @@ flats:
   B107:
     block: B
     sqft: 1402
-    payer_names: []
+    payer_names:
+    - TANIYA KUNDU
     notes: ''
   B108:
     block: B
     sqft: 1228
-    payer_names: []
+    payer_names:
+    - GEETHA B
     notes: ''
   B109:
     block: B
     sqft: 1605
-    payer_names: []
+    payer_names:
+    - ANKUR YADAV
     notes: ''
   B110:
     block: B
@@ -595,7 +622,8 @@ flats:
   B112:
     block: B
     sqft: 1281
-    payer_names: []
+    payer_names:
+    - RAKESH M R
     notes: ''
   B201:
     block: B
@@ -605,7 +633,8 @@ flats:
   B202:
     block: B
     sqft: 1518
-    payer_names: []
+    payer_names:
+    - REGINALD FERNANDEZ
     notes: ''
   B203:
     block: B
@@ -622,7 +651,8 @@ flats:
   B205:
     block: B
     sqft: 1104
-    payer_names: []
+    payer_names:
+    - SUMITKUMARSHRIKANTPUJERI
     notes: ''
   B206:
     block: B
@@ -662,7 +692,8 @@ flats:
   B212:
     block: B
     sqft: 1281
-    payer_names: []
+    payer_names:
+    - RANJITH MENON P V
     notes: ''
   B301:
     block: B
@@ -756,6 +787,7 @@ flats:
     sqft: 1101
     payer_names:
     - PRAVEEN KUMAR
+    - PRAVEEN  K
     notes: ''
   C005:
     block: C
@@ -783,7 +815,8 @@ flats:
   C009:
     block: C
     sqft: 1118
-    payer_names: []
+    payer_names:
+    - SUJAY BS
     notes: ''
   C010:
     block: C
@@ -829,6 +862,7 @@ flats:
     sqft: 1247
     payer_names:
     - MYLA SAI KIRAN BABU
+    - ADARSH SHARMA
     notes: ''
   C018:
     block: C
@@ -844,7 +878,8 @@ flats:
   C102:
     block: C
     sqft: 1240
-    payer_names: []
+    payer_names:
+    - SUPRATEEM DUTTA
     notes: ''
   C103:
     block: C
@@ -866,18 +901,21 @@ flats:
   C106:
     block: C
     sqft: 1578
-    payer_names: []
+    payer_names:
+    - MR KADIM SATISH KUMA
     notes: ''
   C107:
     block: C
     sqft: 1571
-    payer_names: []
+    payer_names:
+    - SIDDHARTH AHUJA
     notes: ''
   C108:
     block: C
     sqft: 1639
     payer_names:
     - AKASH R
+    - MUKESH N
     notes: ''
   C109:
     block: C
@@ -912,7 +950,8 @@ flats:
   C114:
     block: C
     sqft: 1192
-    payer_names: []
+    payer_names:
+    - VINOD R PAI
     notes: ''
   C115:
     block: C
@@ -928,7 +967,8 @@ flats:
   C117:
     block: C
     sqft: 1247
-    payer_names: []
+    payer_names:
+    - ARUNAKUMAR SARI
     notes: ''
   C118:
     block: C
@@ -945,7 +985,8 @@ flats:
   C202:
     block: C
     sqft: 1240
-    payer_names: []
+    payer_names:
+    - ROSHAN KUMAR NAIK
     notes: ''
   C203:
     block: C
@@ -955,7 +996,8 @@ flats:
   C204:
     block: C
     sqft: 1240
-    payer_names: []
+    payer_names:
+    - ARUN BABU S
     notes: ''
   C205:
     block: C
@@ -1062,12 +1104,14 @@ flats:
   C305:
     block: C
     sqft: 1625
-    payer_names: []
+    payer_names:
+    - AJITAV  DUTTA
     notes: ''
   C306:
     block: C
     sqft: 1578
-    payer_names: []
+    payer_names:
+    - B RAJESH
     notes: ''
   C307:
     block: C
@@ -1090,7 +1134,8 @@ flats:
   C310:
     block: C
     sqft: 1235
-    payer_names: []
+    payer_names:
+    - V  KRISHNA
     notes: ''
   C311:
     block: C
@@ -1101,18 +1146,21 @@ flats:
   C312:
     block: C
     sqft: 1235
-    payer_names: []
+    payer_names:
+    - BHUPENDRA HINDOCHA
     notes: ''
   C313:
     block: C
     sqft: 1172
     payer_names:
     - BHEEMAPPA BHOVI
+    - NARENDRA KUPPILI
     notes: ''
   C314:
     block: C
     sqft: 1192
-    payer_names: []
+    payer_names:
+    - SHYAM SINGH
     notes: ''
   C315:
     block: C
@@ -1138,8 +1186,8 @@ flats:
     - TEJAS J N
     notes: ''
 unmapped_payers:
-  description: Payers in bank credits with no flat in narration — add to flats.<FLAT>.payer_names once
-    confirmed
+  description: Payers in bank credits with no flat in narration — add to flats.<FLAT>.payer_names
+    once confirmed
   entries:
   - name: PRANJAL ARABINDA MED
     payment_count: 4
