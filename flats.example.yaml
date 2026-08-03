@@ -3,6 +3,8 @@ meta:
   description: Nava Vaibhva flat registry — SBA dimensions + bank statement payers only
   total_flats: 200
   maintenance_rate_per_sqft: 2.5
+  # Set the fixed per-flat monthly water charge before generating reports.
+  water_bill_per_month: 0
   sources:
   - Flat dimension table (FLAT NO / SBA SQFT) — committee reference
   - HDFC Acct_Statement_June2026.xls — payer names from credit transactions

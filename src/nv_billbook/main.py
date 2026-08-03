@@ -39,6 +39,11 @@ def parse_args() -> argparse.Namespace:
         default="config.yaml",
         help="Path to config file (default: config.yaml)",
     )
+    parser.add_argument(
+        "--water-bill",
+        type=float,
+        help="Fixed per-flat monthly water bill for this report (overrides flats.yaml)",
+    )
     return parser.parse_args()
 
 
@@ -75,7 +80,13 @@ def _load_flats_registry(config: Config) -> FlatsRegistry | None:
     return registry
 
 
-def _process_statement(path: Path, config: Config, month_filter: str | None, flats_registry: FlatsRegistry | None) -> Path | None:
+def _process_statement(
+    path: Path,
+    config: Config,
+    month_filter: str | None,
+    flats_registry: FlatsRegistry | None,
+    water_bill_per_month: float | None,
+) -> Path | None:
     print(f"Processing: {path.name}")
     parsed = parse_hdfc_statement(path, config)
     report_month = infer_report_month(parsed.meta, parsed.transactions)
@@ -86,7 +97,14 @@ def _process_statement(path: Path, config: Config, month_filter: str | None, fla
 
     classified = classify_transactions(parsed.transactions, config, flats_registry)
     split = split_by_type(classified)
-    output_path = write_monthly_report(parsed, split, config, report_month)
+    output_path = write_monthly_report(
+        parsed,
+        split,
+        config,
+        report_month,
+        flats_registry=flats_registry,
+        water_bill_per_month=water_bill_per_month,
+    )
 
     credits = split["credits"]
     debits = split["debits"]
@@ -132,7 +150,13 @@ def main() -> None:
     generated: list[Path] = []
     for path in input_paths:
         try:
-            output = _process_statement(path, config, month_filter, flats_registry)
+            output = _process_statement(
+                path,
+                config,
+                month_filter,
+                flats_registry,
+                args.water_bill,
+            )
             if output:
                 generated.append(output)
         except Exception as exc:

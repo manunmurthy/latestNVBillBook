@@ -10,7 +10,9 @@ from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.utils import get_column_letter
 
 from nv_billbook.config import Config
+from nv_billbook.flats_registry import FlatsRegistry
 from nv_billbook.parser import ParsedStatement
+from nv_billbook.reconciliation import build_maintenance_reconciliation
 
 MONEY_COLUMNS = ("debit", "credit", "amount", "balance")
 SUMMARY_FILL = PatternFill("solid", fgColor="1F4E79")
@@ -170,6 +172,8 @@ def write_monthly_report(
     split: dict[str, pd.DataFrame],
     config: Config,
     report_month: str,
+    flats_registry: FlatsRegistry | None = None,
+    water_bill_per_month: object | None = None,
 ) -> Path:
     """Write a monthly workbook and return the output path."""
     config.output_dir.mkdir(parents=True, exist_ok=True)
@@ -180,6 +184,15 @@ def write_monthly_report(
     debits_df = _prepare_display_frame(split["debits"], "debit")
     other_df = _prepare_display_frame(split["other"], "other")
     all_df = _prepare_display_frame(split["all"], "all")
+    reconciliation_df = (
+        build_maintenance_reconciliation(
+            split["credits"],
+            flats_registry,
+            water_bill_per_month=water_bill_per_month,
+        )
+        if flats_registry
+        else pd.DataFrame()
+    )
 
     with pd.ExcelWriter(output_path, engine="openpyxl") as writer:
         summary_df.to_excel(writer, sheet_name="Summary", index=False)
@@ -187,6 +200,7 @@ def write_monthly_report(
         debits_df.to_excel(writer, sheet_name="Debits", index=False)
         other_df.to_excel(writer, sheet_name="Other", index=False)
         all_df.to_excel(writer, sheet_name="All Transactions", index=False)
+        reconciliation_df.to_excel(writer, sheet_name="Maintenance Reconciliation", index=False)
 
         _style_summary_sheet(writer, "Summary")
         for sheet_name, frame in (
@@ -196,6 +210,23 @@ def write_monthly_report(
             ("All Transactions", all_df),
         ):
             _format_sheet_columns(writer, sheet_name, frame)
+
+        _format_sheet_columns(writer, "Maintenance Reconciliation", reconciliation_df)
+        reconciliation_sheet = writer.sheets["Maintenance Reconciliation"]
+        for cell in reconciliation_sheet[1]:
+            cell.fill = HEADER_FILL
+            cell.font = HEADER_FONT
+        for row in reconciliation_sheet.iter_rows(min_row=2, max_row=reconciliation_sheet.max_row):
+            for cell in row:
+                if reconciliation_sheet.cell(row=1, column=cell.column).value in {
+                    "Expected Maintenance",
+                    "Water Bill",
+                    "Expected",
+                    "Paid",
+                    "Amount Due",
+                    "Extra Paid",
+                }:
+                    cell.number_format = "#,##0.00"
 
         summary_sheet = writer.sheets["Summary"]
         summary_sheet.insert_rows(1, 2)
