@@ -39,6 +39,27 @@ Output file: **`data/output/YYYY-MM_summary.xlsx`**
 
 ---
 
+## Three-month collection history
+
+For one HDFC statement that covers exactly three calendar months, create a separate consolidated workbook without changing the monthly report:
+
+```bash
+PYTHONPATH=src python3 -m nv_billbook.history \
+  --input "/full/path/to/three_month_HDFC_statement.xls"
+```
+
+The output is `data/output/YYYY-MM_to_YYYY-MM_collection_history.xlsx` with one worksheet per registered flat. For example, the first tab is `A001` and contains only A001 data:
+
+| Section in each flat worksheet | What it contains |
+|---|---|
+| **Period Summary** | Three-month expected, paid, due, extra paid, and overall status for that flat |
+| **Monthly Reconciliation** | Paid vs expected for each statement month, including due, extra paid, and status |
+| **Payment Transactions** | Every mapped incoming payment for that flat, with date, month, payer, type, and amount |
+
+Before running it, configure the water bill for every month in the statement under `meta.water_bills_by_month` in `flats.yaml`.
+
+---
+
 ## One-time setup (do this once)
 
 ### 1. Clone / open the project
@@ -221,10 +242,14 @@ latestNVBillBook/
 │   ├── parser.py            # HDFC XLS parser
 │   ├── classifier.py        # Credit / debit / flat extraction
 │   ├── reconciliation.py    # Flat-wise maintenance reconciliation logic
-│   └── reporter.py          # Excel workbook builder
+│   ├── reporter.py          # Excel workbook builder
+│   ├── collection_history.py # Three-month history and reconciliation logic
+│   ├── history_reporter.py  # Three-month history workbook builder
+│   └── history.py           # Three-month history CLI entry point
 └── tests/
     ├── test_parser.py
-    └── test_reconciliation.py
+    ├── test_reconciliation.py
+    └── test_collection_history.py
 ```
 
 ---
@@ -253,6 +278,10 @@ Store the standard values in `meta`:
 meta:
   maintenance_rate_per_sqft: 2.5
   water_bill_per_month: 287  # fallback when --water-bill is not supplied
+  water_bills_by_month:      # required for the three-month history report
+    "2026-03": 287
+    "2026-04": 287
+    "2026-05": 287
 ```
 
 For a month with a different water charge, use the command-line option instead of editing the file:
@@ -264,6 +293,8 @@ PYTHONPATH=src python3 -m nv_billbook.main \
 ```
 
 The reconciliation sheet calculates `Expected Maintenance = Sqft × maintenance rate`, then adds the water bill. It sums every mapped credit for the flat and assigns one of four statuses: **Paid**, **Excess**, **Short**, or **Pending**.
+
+The three-month history report selects the water bill using the transaction month. It stops with a clear error if any statement month is missing from `water_bills_by_month`.
 
 ### Structure (per flat)
 
@@ -366,6 +397,7 @@ Re-run the script after saving — no code changes needed.
 - [x] Flat registry (`flats.yaml`) — 200 flats with SBA sqft + bank payer names
 - [x] Payer-to-flat matching from bank statement names only
 - [x] Flat-wise maintenance reconciliation worksheet
+- [x] Three-month flat transaction history and reconciliation report
 - [ ] PDF statement support
 - [ ] Flat-wise collection pivot (like legacy NV Maintenance workbook)
 - [ ] Multi-month comparison sheet

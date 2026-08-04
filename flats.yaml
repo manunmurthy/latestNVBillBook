@@ -4,6 +4,11 @@ meta:
     only
   total_flats: 200
   maintenance_rate_per_sqft: 2.5
+  # Enter the actual fixed per-flat charge for each month before running history.py.
+  water_bills_by_month:
+    "2026-04": 291
+    "2026-05": 221
+    "2026-06": 242
   sources:
   - Flat dimension table (FLAT NO / SBA SQFT) — committee reference
   - HDFC Acct_Statement_June2026.xls — payer names from credit transactions
