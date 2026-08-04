@@ -5,7 +5,7 @@ meta:
   maintenance_rate_per_sqft: 2.5
   # Set the fixed per-flat monthly water charge before generating reports.
   water_bill_per_month: 0
-  # Enter the actual fixed per-flat charge for each month before running history.py.
+  # Enter the actual fixed per-flat charge for every month in a history report.
   water_bills_by_month:
     "2026-03": 287
     "2026-04": 287

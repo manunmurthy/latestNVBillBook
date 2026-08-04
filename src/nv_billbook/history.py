@@ -1,4 +1,4 @@
-"""CLI for a standalone three-month flat collection history report."""
+"""CLI for a standalone multi-month flat collection history report."""
 
 from __future__ import annotations
 
@@ -20,11 +20,18 @@ from nv_billbook.main import _load_flats_registry
 from nv_billbook.parser import parse_hdfc_statement
 
 
+SUPPORTED_PERIOD_LENGTHS = {3, 6, 12}
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Create a flat-wise history report from one three-month HDFC statement."
+        description="Create a flat-wise history report from one 3-, 6-, or 12-month HDFC statement."
     )
-    parser.add_argument("--input", required=True, help="Three-month HDFC statement file (.xls or .xlsx)")
+    parser.add_argument(
+        "--input",
+        required=True,
+        help="HDFC statement file covering 3, 6, or 12 calendar months (.xls or .xlsx)",
+    )
     parser.add_argument("--config", default="config.yaml", help="Path to config file")
     return parser.parse_args()
 
@@ -48,9 +55,9 @@ def main() -> None:
 
     parsed = parse_hdfc_statement(input_path, config)
     month_keys = month_keys_from_transactions(parsed.transactions)
-    if len(month_keys) != 3:
+    if len(month_keys) not in SUPPORTED_PERIOD_LENGTHS:
         print(
-            "This command requires transactions from exactly three calendar months; "
+            "This command requires transactions from 3, 6, or 12 calendar months; "
             f"found: {', '.join(month_keys) or 'none'}.",
             file=sys.stderr,
         )

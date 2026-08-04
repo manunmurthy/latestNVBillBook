@@ -1,4 +1,4 @@
-"""Tests for three-month flat collection history calculations."""
+"""Tests for multi-month flat collection history calculations."""
 
 from datetime import date
 
