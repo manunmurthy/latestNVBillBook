@@ -491,7 +491,8 @@ flats:
   B001:
     block: B
     sqft: 1128
-    payer_names: []
+    payer_names: 
+    - AMALA PRAMILA SHALINI JOHN
     notes: ''
   B002:
     block: B
@@ -507,7 +508,8 @@ flats:
   B004:
     block: B
     sqft: 1104
-    payer_names: []
+    payer_names: 
+    - S R RAMA SUBRAMANIAN
     notes: ''
   B005:
     block: B
@@ -563,7 +565,8 @@ flats:
   B102:
     block: B
     sqft: 1518
-    payer_names: []
+    payer_names: 
+    - VAMSI KIRAN K
     notes: ''
   B103:
     block: B
@@ -1048,7 +1051,8 @@ flats:
   C213:
     block: C
     sqft: 1172
-    payer_names: []
+    payer_names: 
+    - BAISHALI  RAWAT
     notes: ''
   C214:
     block: C
