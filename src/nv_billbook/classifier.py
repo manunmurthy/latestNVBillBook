@@ -81,13 +81,17 @@ def extract_payer_name(text: str) -> str:
     if tpt_match:
         return tpt_match.group(2).strip()
 
-    neft_match = re.search(
-        r"NEFT CR-[^-]+-(.+?)-NAVA VAIBHAVA",
-        narration,
-        re.IGNORECASE,
-    )
+    neft_match = re.search(r"NEFT CR-[^-]+-(.+?)-FLAT MAINTENANCE", narration, re.IGNORECASE)
     if neft_match:
         return neft_match.group(1).strip()
+
+    neft_match = re.search(r"NEFT CR-[^-]+-(.+?)-NAVA VAIBHAVA", narration, re.IGNORECASE)
+    if neft_match:
+        return neft_match.group(1).strip()
+
+    neft_fallback = re.search(r"NEFT CR-[^-]+-(.+?)-", narration, re.IGNORECASE)
+    if neft_fallback:
+        return neft_fallback.group(1).strip()
 
     imps_match = re.search(r"IMPS-\d+-(.+?)-", narration, re.IGNORECASE)
     if imps_match:
