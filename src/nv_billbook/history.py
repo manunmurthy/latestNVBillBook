@@ -32,6 +32,10 @@ def parse_args() -> argparse.Namespace:
         required=True,
         help="HDFC statement file covering 3, 6, or 12 calendar months (.xls or .xlsx)",
     )
+    parser.add_argument(
+        "--flat",
+        help="Optional flat number to generate a report for one flat only (for example A001)",
+    )
     parser.add_argument("--config", default="config.yaml", help="Path to config file")
     return parser.parse_args()
 
@@ -71,6 +75,13 @@ def main() -> None:
         )
         sys.exit(1)
 
+    flat_filter: str | None = None
+    if args.flat:
+        flat_filter = args.flat.strip().upper().replace("-", "").replace(" ", "")
+        if flat_filter not in registry.flats:
+            print(f"Flat not found in registry: {args.flat}", file=sys.stderr)
+            sys.exit(1)
+
     classified = classify_transactions(parsed.transactions, config, registry)
     credits = split_by_type(classified)["credits"]
     try:
@@ -82,17 +93,27 @@ def main() -> None:
         print(str(exc), file=sys.stderr)
         sys.exit(1)
 
+    if flat_filter:
+        transaction_history = transaction_history[transaction_history["Flat"] == flat_filter]
+        monthly_reconciliation = monthly_reconciliation[
+            monthly_reconciliation["Flat"] == flat_filter
+        ]
+
     period_summary = build_period_summary(monthly_reconciliation)
-    output_path = config.output_dir / (
-        f"{month_keys[0]}_to_{month_keys[-1]}_collection_history.xlsx"
-    )
+    filename = f"{month_keys[0]}_to_{month_keys[-1]}_collection_history.xlsx"
+    if flat_filter:
+        filename = f"{month_keys[0]}_to_{month_keys[-1]}_{flat_filter}_collection_history.xlsx"
+    output_path = config.output_dir / filename
     write_collection_history_report(
         output_path,
         transaction_history,
         monthly_reconciliation,
         period_summary,
     )
-    print(f"Collection history report written: {output_path}")
+    if flat_filter:
+        print(f"Collection history report written for {flat_filter}: {output_path}")
+    else:
+        print(f"Collection history report written: {output_path}")
 
 
 if __name__ == "__main__":

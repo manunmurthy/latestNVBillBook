@@ -6,18 +6,18 @@ meta:
   maintenance_rate_per_sqft: 2.5
   # Enter the actual fixed per-flat charge for every month in a history report.
   water_bills_by_month:
-    "2025-04": 708
-    "2025-05": 747
-    "2025-06": 509
-    "2025-07": 542
-    "2025-08": 478
-    "2025-09": 321
-    "2025-10": 370
-    "2025-11": 351
-    "2025-12": 331
-    "2026-01": 159
-    "2026-02": 151
-    "2026-03": 291
+    "2025-04": 618
+    "2025-05": 708
+    "2025-06": 747
+    "2025-07": 509
+    "2025-08": 542
+    "2025-09": 478
+    "2025-10": 321
+    "2025-11": 370
+    "2025-12": 351
+    "2026-01": 331
+    "2026-02": 159
+    "2026-03": 151
   sources:
   - Flat dimension table (FLAT NO / SBA SQFT) — committee reference
   - HDFC Acct_Statement_June2026.xls — payer names from credit transactions

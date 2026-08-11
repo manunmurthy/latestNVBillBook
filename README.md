@@ -12,7 +12,7 @@ The following is implemented and working:
 
 | Feature | Details |
 |---------|---------|
-| **HDFC `.xls` parser** | Auto-detects the transaction header row in HDFC exports — no manual editing |
+| **HDFC statement parser** | Auto-detects the transaction header row in HDFC exports — no manual editing |
 | **Credit / debit / other split** | Deposits → Credits, vendor payments → Debits, bank charges → Other |
 | **Smart extraction** | Flat no (e.g. `A003`, `B303`), payer/payee name, and purpose from UPI/TPT/NEFT narrations |
 | **Expense categories** | Auto-tags debits (STP, gardening, electrical, solar, water, fuel, garbage, telecom, etc.) |
@@ -49,6 +49,16 @@ PYTHONPATH=src python3 -m nv_billbook.history \
 ```
 
 The output is `data/output/YYYY-MM_to_YYYY-MM_collection_history.xlsx` with one worksheet per registered flat. For example, the first tab is `A001` and contains only A001 data:
+
+If you want only one flat, pass `--flat A001` and the workbook will contain just that flat:
+
+```bash
+PYTHONPATH=src python3 -m nv_billbook.history \
+  --input "/full/path/to/financial_year_HDFC_statement.xls" \
+  --flat A001
+```
+
+That creates `data/output/YYYY-MM_to_YYYY-MM_A001_collection_history.xlsx`.
 
 | Section in each flat worksheet | What it contains |
 |---|---|
@@ -159,8 +169,8 @@ open data/output/2026-07_summary.xlsx      # macOS
 
 | Command | When to use |
 |---------|-------------|
-| `--input /path/to/file.xls` | Process one specific statement |
-| `--input /path/to/folder/ --all` | Process all statements in a folder |
+| `--input /path/to/file.xls` | Process one specific statement (`.xls`, `.xlsx`, `.xlsm`, or `.csv`) |
+| `--input /path/to/folder/ --all` | Process all statements in a folder (`.xls`, `.xlsx`, `.xlsm`, or `.csv`) |
 | `--month 2026-07` | Process only files matching July 2026 (uses `data/input/`) |
 | `--config path/to/config.yaml` | Use a different config file |
 | `--water-bill 287` | Set the fixed per-flat water bill for this report; overrides `flats.yaml` |
@@ -213,7 +223,7 @@ Typical debit narrations: STP vendor, gardening, electrical, solar, water tanker
 
 ## HDFC statement format
 
-HDFC `.xls` exports have a header block, then a transaction table:
+HDFC exports have a header block, then a transaction table:
 
 | Date | Narration | Chq./Ref.No. | Value Dt | Withdrawal Amt. | Deposit Amt. | Closing Balance |
 |------|-----------|--------------|----------|-----------------|--------------|-----------------|

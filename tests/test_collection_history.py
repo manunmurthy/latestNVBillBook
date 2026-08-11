@@ -100,3 +100,28 @@ def test_history_workbook_has_one_sheet_per_flat(
     assert workbook.sheetnames == ["A001", "A002"]
     assert workbook["A001"]["A1"].value == "Flat A001 — Collection History"
     assert workbook["A002"]["A1"].value == "Flat A002 — Collection History"
+
+
+def test_history_workbook_can_be_limited_to_one_flat(
+    tmp_path, registry: FlatsRegistry, credits: pd.DataFrame
+) -> None:
+    months = ["2026-03", "2026-04", "2026-05"]
+    monthly = build_monthly_reconciliation(
+        credits, registry, months, {month: 287 for month in months}
+    )
+    flat_monthly = monthly[monthly["Flat"] == "A001"]
+    flat_history = build_flat_transaction_history(credits, registry)
+    flat_history = flat_history[flat_history["Flat"] == "A001"]
+    flat_summary = build_period_summary(flat_monthly)
+
+    output_path = write_collection_history_report(
+        tmp_path / "history_a001.xlsx",
+        flat_history,
+        flat_monthly,
+        flat_summary,
+    )
+
+    workbook = load_workbook(output_path, data_only=True)
+    assert workbook.sheetnames == ["A001"]
+    assert workbook["A001"]["A1"].value == "Flat A001 — Collection History"
+    assert workbook["A001"]["A4"].value == "A001"
