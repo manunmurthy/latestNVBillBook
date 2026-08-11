@@ -60,6 +60,15 @@ PYTHONPATH=src python3 -m nv_billbook.history \
 
 That creates `data/output/YYYY-MM_to_YYYY-MM_A001_collection_history.xlsx`.
 
+If your 3, 6, or 12 months are saved as separate statement files, point `--input` to the folder instead of a single file. The command will read every statement in that folder, combine them, and calculate the history across the full period:
+
+```bash
+PYTHONPATH=src python3 -m nv_billbook.history \
+  --input "/full/path/to/folder-with-statements"
+```
+
+You can still combine this with `--flat A001` if you only want one flat.
+
 | Section in each flat worksheet | What it contains |
 |---|---|
 | **Period Summary** | Expected, paid, due, extra paid, and overall status for the complete statement period |

@@ -15,6 +15,7 @@ from nv_billbook.collection_history import (
     month_keys_for_period,
 )
 from nv_billbook.flats_registry import FlatInfo, FlatsRegistry
+from nv_billbook.history import _load_statements
 from nv_billbook.history_reporter import write_collection_history_report
 
 
@@ -125,3 +126,37 @@ def test_history_workbook_can_be_limited_to_one_flat(
     assert workbook.sheetnames == ["A001"]
     assert workbook["A001"]["A1"].value == "Flat A001 — Collection History"
     assert workbook["A001"]["A4"].value == "A001"
+
+
+def test_load_statements_combines_multiple_files(tmp_path, monkeypatch) -> None:
+    folder = tmp_path / "statements"
+    folder.mkdir()
+    (folder / "March.xls").write_text("", encoding="utf-8")
+    (folder / "April.xls").write_text("", encoding="utf-8")
+
+    class DummyParsed:
+        def __init__(self, transactions: pd.DataFrame) -> None:
+            self.transactions = transactions
+
+    def fake_parse(path, config):
+        month = "2026-03" if path.name == "March.xls" else "2026-04"
+        return DummyParsed(
+            pd.DataFrame(
+                [
+                    {
+                        "date": pd.Timestamp(f"{month}-05").date(),
+                        "date_str": "05/03/26" if month == "2026-03" else "05/04/26",
+                        "source_file": path.name,
+                    }
+                ]
+            )
+        )
+
+    monkeypatch.setattr("nv_billbook.history.parse_hdfc_statement", fake_parse)
+
+    class DummyConfig:
+        pass
+
+    combined = _load_statements(folder, DummyConfig())
+    assert list(combined["source_file"]) == ["March.xls", "April.xls"]
+    assert list(combined["date_str"]) == ["05/03/26", "05/04/26"]
