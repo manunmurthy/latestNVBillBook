@@ -230,7 +230,8 @@ flats:
   A111:
     block: A
     sqft: 1178
-    payer_names: []
+    payer_names: 
+    - SRINIVASA V S
     notes: ''
   A112:
     block: A
@@ -981,6 +982,7 @@ flats:
     sqft: 1172
     payer_names:
     - PHANI PRADEEP KUMAR
+    - PHANI PRADEEP KUMAR GUDIPATI
     notes: ''
   C114:
     block: C
