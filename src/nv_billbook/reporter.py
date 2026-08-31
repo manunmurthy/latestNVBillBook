@@ -42,41 +42,60 @@ def _format_sheet_columns(writer: pd.ExcelWriter, sheet_name: str, df: pd.DataFr
 
 def _prepare_display_frame(df: pd.DataFrame, txn_type: str) -> pd.DataFrame:
     if df.empty:
-        columns = ["Date", "Narration", "Reference", "Amount (₹)", "Category"]
-        return pd.DataFrame(columns=columns)
+        if txn_type == "credit":
+            return pd.DataFrame(
+                columns=["Date", "Narration", "Reference", "Flat No", "SBA (sqft)", "Payee", "Credit (₹)", "Balance (₹)"]
+            )
+        if txn_type == "debit":
+            return pd.DataFrame(
+                columns=["Date", "Narration", "Reference", "Payee", "Purpose / Type", "Debit (₹)", "Balance (₹)"]
+            )
+        return pd.DataFrame(
+            columns=["Date", "Narration", "Reference", "Payee", "Purpose / Type", "Debit (₹)", "Credit (₹)", "Amount (₹)", "Balance (₹)"]
+        )
 
     def _format_date(row: pd.Series) -> str:
         if isinstance(row["date"], date):
             return row["date"].strftime("%d/%m/%Y")
         return str(row.get("date_str", ""))
 
-    display = pd.DataFrame(
-        {
-            "Date": df.apply(_format_date, axis=1),
-            "Narration": df["narration"],
-            "Reference": df["reference"],
-            "Flat No": df["flat_no"].fillna(""),
-            "Counterparty": df["counterparty"].fillna(""),
-            "Purpose / Type": df["purpose"].fillna(""),
-            "Category": df["category"].fillna(""),
-        }
-    )
-    if "sqft" in df.columns:
-        display.insert(
-            4,
-            "SBA (sqft)",
-            df["sqft"].apply(
-                lambda v: int(v) if pd.notna(v) and str(v).strip() not in ("", "nan") else ""
-            ),
-        )
-
     if txn_type == "credit":
+        display = pd.DataFrame(
+            {
+                "Date": df.apply(_format_date, axis=1),
+                "Narration": df["narration"],
+                "Reference": df["reference"],
+                "Flat No": df["flat_no"].fillna(""),
+                "SBA (sqft)": df.get("sqft", pd.Series(index=df.index, dtype="object")).apply(
+                    lambda v: int(v) if pd.notna(v) and str(v).strip() not in ("", "nan") else ""
+                ),
+                "Payee": df["counterparty"].fillna(""),
+            }
+        )
         display["Credit (₹)"] = df["credit"]
         display["Balance (₹)"] = df["balance"]
     elif txn_type == "debit":
+        display = pd.DataFrame(
+            {
+                "Date": df.apply(_format_date, axis=1),
+                "Narration": df["narration"],
+                "Reference": df["reference"],
+                "Payee": df["counterparty"].fillna(""),
+                "Purpose / Type": df["purpose"].fillna(""),
+            }
+        )
         display["Debit (₹)"] = df["debit"]
         display["Balance (₹)"] = df["balance"]
     else:
+        display = pd.DataFrame(
+            {
+                "Date": df.apply(_format_date, axis=1),
+                "Narration": df["narration"],
+                "Reference": df["reference"],
+                "Payee": df["counterparty"].fillna(""),
+                "Purpose / Type": df["purpose"].fillna(""),
+            }
+        )
         display["Debit (₹)"] = df["debit"]
         display["Credit (₹)"] = df["credit"]
         display["Amount (₹)"] = df["amount"]

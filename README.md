@@ -14,7 +14,7 @@ The following is implemented and working:
 |---------|---------|
 | **HDFC statement parser** | Auto-detects the transaction header row in HDFC exports — no manual editing |
 | **Credit / debit / other split** | Deposits → Credits, vendor payments → Debits, bank charges → Other |
-| **Smart extraction** | Flat no (e.g. `A003`, `B303`), payer/payee name, and purpose from UPI/TPT/NEFT narrations |
+| **Smart extraction** | Flat no (e.g. `A003`, `B303`) and payer/payee name from UPI/TPT/NEFT narrations |
 | **Expense categories** | Auto-tags debits (STP, gardening, electrical, solar, water, fuel, garbage, telecom, etc.) |
 | **Maintenance reconciliation** | Calculates expected maintenance, water bill, paid amount, dues, excess, and status for every registered flat |
 | **Excel report** | One workbook per month with 6 sheets, including Maintenance Reconciliation |
@@ -31,10 +31,10 @@ Output file: **`data/output/YYYY-MM_summary.xlsx`**
 | Sheet | What it contains |
 |-------|------------------|
 | **Summary** | Opening/closing balance, total credits & debits, income/expense breakdown by category |
-| **Credits** | All deposits — flat no, payer name, type (maintenance / water / AMC) |
-| **Debits** | All payments — payee, purpose, expense category |
-| **Other** | Bank charges and unmatched entries |
-| **All Transactions** | Complete transaction list |
+| **Credits** | All deposits — flat no, SBA, payee, credit amount, balance |
+| **Debits** | All payments — payee, purpose, debit amount, balance |
+| **Other** | Bank charges and unmatched entries — payee, purpose, debit/credit/amount, balance |
+| **All Transactions** | Complete transaction list — payee, purpose, debit/credit/amount, balance |
 | **Maintenance Reconciliation** | One row per registered flat: expected charges, payments received, amount due or extra paid, and status |
 
 ---
@@ -169,8 +169,8 @@ open data/output/2026-07_summary.xlsx      # macOS
 1. **Summary** — check opening/closing balance matches the bank statement
 2. **Maintenance Reconciliation** — check Pending, Short, and Excess flats; confirm the water bill used for the month
 3. **Credits** — verify maintenance collections and investigate rows without a Flat No
-4. **Debits** — confirm all vendor payments are categorised correctly
-5. **Other** — review bank charges (usually 1–2 entries)
+4. **Debits** — confirm vendor payments and payee names are correct
+5. **Other** — review bank charges and unmatched entries (usually 1–2 rows)
 
 ---
 
@@ -205,8 +205,8 @@ Done. 1 report(s) created in data/output/
 [ ] Open data/output/YYYY-MM_summary.xlsx
 [ ] Verify Summary totals vs bank statement
 [ ] Review Maintenance Reconciliation — Pending, Short, and Excess flats
-[ ] Review Credits sheet (flat-wise collections)
-[ ] Review Debits sheet (expense categories)
+[ ] Review Credits sheet (flat-wise collections and payee names)
+[ ] Review Debits sheet (payee names and purpose)
 [ ] Archive statement + report for records
 ```
 
