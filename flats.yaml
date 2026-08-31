@@ -139,7 +139,9 @@ flats:
   A015:
     block: A
     sqft: 1260
-    payer_names: []
+    payer_names:
+    - VADLAMUDIUMARANI
+    - VADLAMUDI UMA RANI
     notes: ''
   A016:
     block: A
