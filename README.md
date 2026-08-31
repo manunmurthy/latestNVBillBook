@@ -117,7 +117,7 @@ Follow these steps at the start of each month for the **previous month's** state
 2. Go to **Accounts → Account Statement**
 3. Select the **Nava Vaibhava Resi Welfare Association** account
 4. Choose the date range for the month (e.g. 01/07/2026 to 31/07/2026)
-5. Download as **Excel (.xls)** — not PDF (PDF is not supported yet)
+5. Download as **Excel (.xls)** or **PDF** if you want to use the PDF parser
 6. Save the file, e.g.:
 
    ```
@@ -157,6 +157,17 @@ PYTHONPATH=src python3 -m nv_billbook.main \
   --input "~/Downloads/NVBankStatements/" --all
 ```
 
+**Option D — Convert a PDF statement to Excel first:**
+
+```bash
+PYTHONPATH=src python3 -m nv_billbook.pdf_to_excel \
+  --input "~/Downloads/NVBankStatements/Acct_Statement_July2026.pdf"
+```
+
+This creates an `.xlsx` file with a `Transactions` sheet next to the PDF by default. You can also pass `--output /path/to/file.xlsx` if you want a custom location.
+
+Use this when the bank gives you a PDF instead of an Excel export. If the PDF is password-protected, unlock it first or provide an unprotected copy.
+
 ### Step 4 — Open the report
 
 ```bash
@@ -183,6 +194,7 @@ open data/output/2026-07_summary.xlsx      # macOS
 | `--month 2026-07` | Process only files matching July 2026 (uses `data/input/`) |
 | `--config path/to/config.yaml` | Use a different config file |
 | `--water-bill 287` | Set the fixed per-flat water bill for this report; overrides `flats.yaml` |
+| `--input /path/to/file.pdf` | Convert a PDF statement into Excel with `nv_billbook.pdf_to_excel` |
 
 Example output when it succeeds:
 
@@ -199,9 +211,9 @@ Done. 1 report(s) created in data/output/
 ## Monthly checklist
 
 ```
-[ ] Download HDFC .xls statement for the month
+[ ] Download HDFC .xls statement or PDF for the month
 [ ] Activate venv:  source .venv/bin/activate
-[ ] Run script with --input pointing to the file
+[ ] Run script with --input pointing to the file, or convert PDF first
 [ ] Open data/output/YYYY-MM_summary.xlsx
 [ ] Verify Summary totals vs bank statement
 [ ] Review Maintenance Reconciliation — Pending, Short, and Excess flats
@@ -403,7 +415,8 @@ Re-run the script after saving — no code changes needed.
 |---------|-----|
 | `Config not found` | Run `cp config.example.yaml config.yaml` |
 | `No statement files found` | Check the `--input` path; use the full path to the `.xls` file |
-| `Could not find transaction header row` | Make sure the file is HDFC Excel export, not PDF |
+| `Could not find transaction header row` | Make sure the file is a valid HDFC Excel export |
+| `Failed to convert PDF` | The PDF may be scanned, password-protected, or not in HDFC statement format |
 | `ModuleNotFoundError` | Activate venv and run `pip install -r requirements.txt` |
 | Wrong month in output filename | The tool reads the date range from inside the statement; verify the download covers the correct month |
 
@@ -418,7 +431,7 @@ Re-run the script after saving — no code changes needed.
 - [x] Payer-to-flat matching from bank statement names only
 - [x] Flat-wise maintenance reconciliation worksheet
 - [x] Multi-month (3, 6, or 12) flat transaction history and reconciliation report
-- [ ] PDF statement support
+- [x] PDF statement support for HDFC text-based exports
 - [ ] Flat-wise collection pivot (like legacy NV Maintenance workbook)
 - [ ] Multi-month comparison sheet
 
