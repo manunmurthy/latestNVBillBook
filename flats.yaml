@@ -842,7 +842,8 @@ flats:
   C007:
     block: C
     sqft: 1425
-    payer_names: []
+    payer_names:
+    - HARISH  J
     notes: ''
   C008:
     block: C
@@ -1204,7 +1205,8 @@ flats:
   C315:
     block: C
     sqft: 1192
-    payer_names: []
+    payer_names:
+    - NIRANJAN ALEXANDER J
     notes: ''
   C316:
     block: C
