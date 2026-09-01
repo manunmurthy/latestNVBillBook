@@ -15,7 +15,7 @@ from nv_billbook.collection_history import (
     month_keys_for_period,
 )
 from nv_billbook.flats_registry import FlatInfo, FlatsRegistry
-from nv_billbook.history import _load_statements
+from nv_billbook.history import _load_statements, _parse_flat_filter
 from nv_billbook.history_reporter import write_collection_history_report
 
 
@@ -126,6 +126,15 @@ def test_history_workbook_can_be_limited_to_one_flat(
     assert workbook.sheetnames == ["A001"]
     assert workbook["A001"]["A1"].value == "Flat A001 — Collection History"
     assert workbook["A001"]["A4"].value == "A001"
+
+
+def test_flat_filter_accepts_comma_separated_flat_numbers(registry: FlatsRegistry) -> None:
+    assert _parse_flat_filter(" A002, A001, A002 ", registry) == ["A002", "A001"]
+
+
+def test_flat_filter_reports_all_unknown_flat_numbers(registry: FlatsRegistry) -> None:
+    with pytest.raises(ValueError, match="A003, A004"):
+        _parse_flat_filter("A003,A004", registry)
 
 
 def test_load_statements_combines_multiple_files(tmp_path, monkeypatch) -> None:

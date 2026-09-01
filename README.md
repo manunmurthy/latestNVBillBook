@@ -50,7 +50,7 @@ PYTHONPATH=src python3 -m nv_billbook.history \
 
 The output is `data/output/YYYY-MM_to_YYYY-MM_collection_history.xlsx` with one worksheet per registered flat. For example, the first tab is `A001` and contains only A001 data:
 
-If you want only one flat, pass `--flat A001` and the workbook will contain just that flat:
+If you want only selected flats, pass their comma-separated numbers with `--flat`. The workbook will contain one worksheet per selected flat:
 
 ```bash
 PYTHONPATH=src python3 -m nv_billbook.history \
@@ -60,6 +60,16 @@ PYTHONPATH=src python3 -m nv_billbook.history \
 
 That creates `data/output/YYYY-MM_to_YYYY-MM_A001_collection_history.xlsx`.
 
+For multiple flats, for example A301 through A310:
+
+```bash
+PYTHONPATH=src python3 -m nv_billbook.history \
+  --input "/full/path/to/financial_year_HDFC_statement.xls" \
+  --flat A301,A302,A303,A304,A305,A306,A307,A308,A309,A310
+```
+
+That creates `data/output/YYYY-MM_to_YYYY-MM_selected_collection_history.xlsx` with ten worksheets: `A301` through `A310`.
+
 If your 3, 6, or 12 months are saved as separate statement files, point `--input` to the folder instead of a single file. The command will read every statement in that folder, combine them, and calculate the history across the full period:
 
 ```bash
@@ -67,7 +77,7 @@ PYTHONPATH=src python3 -m nv_billbook.history \
   --input "/full/path/to/folder-with-statements"
 ```
 
-You can still combine this with `--flat A001` if you only want one flat.
+You can still combine this with `--flat A001` or a comma-separated list if you only want selected flats.
 
 | Section in each flat worksheet | What it contains |
 |---|---|

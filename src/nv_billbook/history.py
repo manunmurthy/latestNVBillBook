@@ -37,10 +37,31 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--flat",
-        help="Optional flat number to generate a report for one flat only (for example A001)",
+        help=(
+            "Optional comma-separated flat numbers to include (for example "
+            "A301,A302,A303)"
+        ),
     )
     parser.add_argument("--config", default="config.yaml", help="Path to config file")
     return parser.parse_args()
+
+
+def _parse_flat_filter(value: str, registry) -> list[str]:
+    """Normalize and validate a comma-separated flat selection."""
+    flat_numbers = [
+        item.strip().upper().replace("-", "").replace(" ", "")
+        for item in value.split(",")
+        if item.strip()
+    ]
+    if not flat_numbers:
+        raise ValueError("At least one flat number is required when using --flat.")
+
+    # Preserve the user's order while avoiding duplicate worksheets.
+    selected = list(dict.fromkeys(flat_numbers))
+    missing = [flat_no for flat_no in selected if flat_no not in registry.flats]
+    if missing:
+        raise ValueError(f"Flat not found in registry: {', '.join(missing)}")
+    return selected
 
 
 def _load_statements(input_path: Path, config: Config) -> pd.DataFrame:
@@ -112,11 +133,12 @@ def main() -> None:
         )
         sys.exit(1)
 
-    flat_filter: str | None = None
+    flat_filter: list[str] | None = None
     if args.flat:
-        flat_filter = args.flat.strip().upper().replace("-", "").replace(" ", "")
-        if flat_filter not in registry.flats:
-            print(f"Flat not found in registry: {args.flat}", file=sys.stderr)
+        try:
+            flat_filter = _parse_flat_filter(args.flat, registry)
+        except ValueError as exc:
+            print(str(exc), file=sys.stderr)
             sys.exit(1)
 
     classified = classify_transactions(transactions, config, registry)
@@ -131,15 +153,24 @@ def main() -> None:
         sys.exit(1)
 
     if flat_filter:
-        transaction_history = transaction_history[transaction_history["Flat"] == flat_filter]
+        transaction_history = transaction_history[
+            transaction_history["Flat"].isin(flat_filter)
+        ]
         monthly_reconciliation = monthly_reconciliation[
-            monthly_reconciliation["Flat"] == flat_filter
+            monthly_reconciliation["Flat"].isin(flat_filter)
         ]
 
     period_summary = build_period_summary(monthly_reconciliation)
     filename = f"{month_keys[0]}_to_{month_keys[-1]}_collection_history.xlsx"
     if flat_filter:
-        filename = f"{month_keys[0]}_to_{month_keys[-1]}_{flat_filter}_collection_history.xlsx"
+        if len(flat_filter) == 1:
+            selection_name = flat_filter[0]
+        else:
+            selection_name = "selected"
+        filename = (
+            f"{month_keys[0]}_to_{month_keys[-1]}_"
+            f"{selection_name}_collection_history.xlsx"
+        )
     output_path = config.output_dir / filename
     write_collection_history_report(
         output_path,
@@ -148,7 +179,10 @@ def main() -> None:
         period_summary,
     )
     if flat_filter:
-        print(f"Collection history report written for {flat_filter}: {output_path}")
+        print(
+            "Collection history report written for "
+            f"{', '.join(flat_filter)}: {output_path}"
+        )
     else:
         print(f"Collection history report written: {output_path}")
 
