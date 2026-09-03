@@ -6,7 +6,8 @@ from datetime import date
 from pathlib import Path
 
 import pandas as pd
-from openpyxl.styles import Alignment, Font, PatternFill
+from openpyxl.formatting.rule import FormulaRule
+from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
 
 from nv_billbook.config import Config
@@ -17,8 +18,16 @@ from nv_billbook.reconciliation import build_maintenance_reconciliation
 MONEY_COLUMNS = ("debit", "credit", "amount", "balance")
 SUMMARY_FILL = PatternFill("solid", fgColor="1F4E79")
 HEADER_FILL = PatternFill("solid", fgColor="D9E1F2")
+ALT_ROW_FILL = PatternFill("solid", fgColor="F7F9FB")
+GREEN_FILL = PatternFill("solid", fgColor="E2F0D9")
+YELLOW_FILL = PatternFill("solid", fgColor="FFF2CC")
+RED_FILL = PatternFill("solid", fgColor="FCE4D6")
+BLUE_FILL = PatternFill("solid", fgColor="DDEBF7")
 TITLE_FONT = Font(bold=True, size=14, color="FFFFFF")
 HEADER_FONT = Font(bold=True)
+MUTED_FONT = Font(color="666666")
+THIN_GREY = Side(style="thin", color="D9E1F2")
+CARD_BORDER = Border(left=THIN_GREY, right=THIN_GREY, top=THIN_GREY, bottom=THIN_GREY)
 
 
 def _format_sheet_columns(writer: pd.ExcelWriter, sheet_name: str, df: pd.DataFrame) -> None:
@@ -32,12 +41,102 @@ def _format_sheet_columns(writer: pd.ExcelWriter, sheet_name: str, df: pd.DataFr
         width = min(max(len(value) for value in values) + 2, 60)
         worksheet.column_dimensions[get_column_letter(idx)].width = width
 
+    worksheet.freeze_panes = "A2"
+    if worksheet.max_row >= 1 and worksheet.max_column >= 1:
+        worksheet.auto_filter.ref = worksheet.dimensions
+        for row_number in range(2, worksheet.max_row + 1):
+            if row_number % 2 == 0:
+                for cell in worksheet[row_number]:
+                    cell.fill = ALT_ROW_FILL
+            for cell in worksheet[row_number]:
+                cell.alignment = Alignment(vertical="top", wrap_text=cell.column in {2, 3, 4, 5})
+
+        for cell in worksheet[1]:
+            cell.fill = HEADER_FILL
+            cell.font = HEADER_FONT
+            cell.border = CARD_BORDER
+            cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+
     for row in worksheet.iter_rows(min_row=2, max_row=worksheet.max_row):
         for cell in row:
             if isinstance(cell.value, (int, float)):
                 header = worksheet.cell(row=1, column=cell.column).value
                 if header in {"Debit (₹)", "Credit (₹)", "Amount (₹)", "Balance (₹)"}:
                     cell.number_format = "#,##0.00"
+
+
+def _add_summary_cards(worksheet, summary_df: pd.DataFrame) -> None:
+    """Add a compact visual snapshot beside the detailed summary table."""
+    metrics = {
+        str(row["Metric"]): row["Value"]
+        for _, row in summary_df.iterrows()
+        if str(row["Metric"]).strip()
+    }
+    cards = [
+        ("Total Credits (₹)", "Total Credits", BLUE_FILL),
+        ("Total Debits (₹)", "Total Debits", RED_FILL),
+        ("Closing Balance (₹)", "Closing Balance", GREEN_FILL),
+        ("Pending Flats", "Pending Flats", YELLOW_FILL),
+    ]
+    for index, (metric_key, label, fill) in enumerate(cards):
+        start_col = 4 + index * 2
+        end_col = start_col + 1
+        start_letter = get_column_letter(start_col)
+        end_letter = get_column_letter(end_col)
+        worksheet.merge_cells(f"{start_letter}2:{end_letter}2")
+        worksheet.merge_cells(f"{start_letter}3:{end_letter}4")
+        label_cell = worksheet[f"{start_letter}2"]
+        value_cell = worksheet[f"{start_letter}3"]
+        label_cell.value = label
+        value_cell.value = metrics.get(metric_key, 0)
+        label_cell.fill = fill
+        value_cell.fill = fill
+        label_cell.font = Font(bold=True, color="1F4E79")
+        value_cell.font = Font(bold=True, size=14)
+        label_cell.alignment = Alignment(horizontal="center", vertical="center")
+        value_cell.alignment = Alignment(horizontal="center", vertical="center")
+        label_cell.border = CARD_BORDER
+        value_cell.border = CARD_BORDER
+        if metric_key.endswith("(₹)"):
+            value_cell.number_format = "#,##0.00"
+        worksheet.column_dimensions[start_letter].width = 16
+        worksheet.column_dimensions[end_letter].width = 16
+
+
+def _add_reconciliation_conditional_formatting(worksheet) -> None:
+    headers = {
+        cell.value: cell.column
+        for cell in worksheet[1]
+        if cell.value is not None
+    }
+    status_col = headers.get("Status")
+    flat_col = headers.get("Flat")
+    if status_col:
+        letter = get_column_letter(status_col)
+        status_range = f"{letter}2:{letter}{max(2, worksheet.max_row)}"
+        worksheet.conditional_formatting.add(
+            status_range,
+            FormulaRule(formula=[f'{letter}2="Paid"'], fill=GREEN_FILL, font=Font(color="008000", bold=True)),
+        )
+        worksheet.conditional_formatting.add(
+            status_range,
+            FormulaRule(formula=[f'{letter}2="Excess"'], fill=BLUE_FILL, font=Font(color="0066CC", bold=True)),
+        )
+        worksheet.conditional_formatting.add(
+            status_range,
+            FormulaRule(formula=[f'{letter}2="Pending"'], fill=YELLOW_FILL, font=Font(color="9C6500", bold=True)),
+        )
+        worksheet.conditional_formatting.add(
+            status_range,
+            FormulaRule(formula=[f'{letter}2="Short"'], fill=RED_FILL, font=Font(color="9C0006", bold=True)),
+        )
+    if flat_col:
+        letter = get_column_letter(flat_col)
+        flat_range = f"{letter}2:{letter}{max(2, worksheet.max_row)}"
+        worksheet.conditional_formatting.add(
+            flat_range,
+            FormulaRule(formula=[f'{letter}2=""'], fill=YELLOW_FILL),
+        )
 
 
 def _prepare_display_frame(df: pd.DataFrame, txn_type: str) -> pd.DataFrame:
@@ -184,6 +283,9 @@ def _style_summary_sheet(writer: pd.ExcelWriter, sheet_name: str) -> None:
     for cell in ws[1]:
         cell.fill = HEADER_FILL
         cell.font = HEADER_FONT
+        cell.border = CARD_BORDER
+    ws.column_dimensions["A"].width = 28
+    ws.column_dimensions["B"].width = 20
 
 
 def write_monthly_report(
@@ -235,6 +337,7 @@ def write_monthly_report(
         for cell in reconciliation_sheet[1]:
             cell.fill = HEADER_FILL
             cell.font = HEADER_FONT
+            cell.border = CARD_BORDER
         for row in reconciliation_sheet.iter_rows(min_row=2, max_row=reconciliation_sheet.max_row):
             for cell in row:
                 if reconciliation_sheet.cell(row=1, column=cell.column).value in {
@@ -246,6 +349,7 @@ def write_monthly_report(
                     "Extra Paid",
                 }:
                     cell.number_format = "#,##0.00"
+        _add_reconciliation_conditional_formatting(reconciliation_sheet)
 
         summary_sheet = writer.sheets["Summary"]
         summary_sheet.insert_rows(1, 2)
@@ -256,5 +360,6 @@ def write_monthly_report(
         summary_sheet["A2"].font = Font(bold=True, size=11)
         summary_sheet.merge_cells("A1:B1")
         summary_sheet.merge_cells("A2:B2")
+        _add_summary_cards(summary_sheet, summary_df)
 
     return output_path
