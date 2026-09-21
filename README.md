@@ -2,6 +2,10 @@
 
 Python tool to read **HDFC bank statements** and generate monthly Excel reports for **Nava Vaibhva Resi Welfare Association**.
 
+## Prefer a simple local screen?
+
+The project now includes a local browser interface for the monthly report and collection history. It lets you select statement files, optionally enter flat numbers, preview the result, and download the Excel file—without using report commands. See [LOCAL_APP.md](LOCAL_APP.md) for the one-time setup and everyday instructions.
+
 Download the society account statement from HDFC net banking each month, run one command, and get a ready-to-review Excel workbook with transaction details and a flat-wise maintenance reconciliation.
 
 ---
