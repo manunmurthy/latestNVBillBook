@@ -4,6 +4,40 @@ meta:
     only
   total_flats: 200
   maintenance_rate_per_sqft: 2.5
+  # Enter the actual fixed per-flat charge for every month in a history report.
+  water_bills_by_month:
+    "2024-01": 0
+    "2024-02": 0
+    "2024-03": 900
+    "2024-04": 1580
+    "2024-05": 2033
+    "2024-06": 1633
+    "2024-07": 1531
+    "2024-08": 1704
+    "2024-09": 1802
+    "2024-10": 1113
+    "2024-11": 812
+    "2024-12": 813
+    "2025-01": 650
+    "2025-02": 563
+    "2025-03": 504
+    "2025-04": 618
+    "2025-05": 708
+    "2025-06": 747
+    "2025-07": 509
+    "2025-08": 542
+    "2025-09": 478
+    "2025-10": 321
+    "2025-11": 370
+    "2025-12": 351
+    "2026-01": 331
+    "2026-02": 159
+    "2026-03": 151
+    "2026-04": 291
+    "2026-05": 221
+    "2026-06": 242
+    "2026-07": 287
+    "2026-08": 221
   sources:
   - Flat dimension table (FLAT NO / SBA SQFT) — committee reference
   - HDFC Acct_Statement_June2026.xls — payer names from credit transactions
@@ -105,7 +139,9 @@ flats:
   A015:
     block: A
     sqft: 1260
-    payer_names: []
+    payer_names:
+    - VADLAMUDIUMARANI
+    - VADLAMUDI UMA RANI
     notes: ''
   A016:
     block: A
@@ -196,7 +232,8 @@ flats:
   A111:
     block: A
     sqft: 1178
-    payer_names: []
+    payer_names: 
+    - SRINIVASA V S
     notes: ''
   A112:
     block: A
@@ -342,7 +379,8 @@ flats:
   A216:
     block: A
     sqft: 1228
-    payer_names: []
+    payer_names: 
+    - NAVEEN N
     notes: ''
   A217:
     block: A
@@ -807,7 +845,8 @@ flats:
   C007:
     block: C
     sqft: 1425
-    payer_names: []
+    payer_names:
+    - HARISH  J
     notes: ''
   C008:
     block: C
@@ -949,6 +988,7 @@ flats:
     sqft: 1172
     payer_names:
     - PHANI PRADEEP KUMAR
+    - PHANI PRADEEP KUMAR GUDIPATI
     notes: ''
   C114:
     block: C
@@ -1169,7 +1209,8 @@ flats:
   C315:
     block: C
     sqft: 1192
-    payer_names: []
+    payer_names:
+    - NIRANJAN ALEXANDER J
     notes: ''
   C316:
     block: C
