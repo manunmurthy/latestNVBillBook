@@ -16,7 +16,8 @@ flats:
   C003:
     block: C
     sqft: 1122
-    payer_names: []
+    payer_names:
+    - SAILESHBOHRA
     notes: ''
     upi_ids: []
   C004:
@@ -265,7 +266,8 @@ flats:
   C203:
     block: C
     sqft: 1265
-    payer_names: []
+    payer_names:
+    - VEENA M
     notes: ''
     upi_ids: []
   C204:

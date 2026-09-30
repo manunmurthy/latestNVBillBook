@@ -270,6 +270,7 @@ flats:
     sqft: 1228
     payer_names:
     - SAUMYA RANJAN MOHAPATRA
+    - MR SAUMYA RANJAN MOH
     notes: ''
     upi_ids: []
   A201:
@@ -277,6 +278,7 @@ flats:
     sqft: 1172
     payer_names:
     - KAVYAK BABU ANUMUKONDA
+    - ANUMUKONDA KAVYAK BABU
     notes: ''
     upi_ids: []
   A202:
@@ -479,6 +481,7 @@ flats:
     sqft: 1212
     payer_names:
     - GOUTHAM S
+    - GANESHT
     notes: ''
     upi_ids: []
   A311:
