@@ -11,7 +11,6 @@ build/
 
 # Local config & data (may contain account details)
 config.yaml
-data/input/*
 data/output/*
 !data/input/.gitkeep
 !data/output/.gitkeep

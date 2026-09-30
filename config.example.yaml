@@ -10,6 +10,8 @@ paths:
 
 # Flat registry — owner names, payer aliases (see flats.example.yaml)
 flats_registry: "flats.yaml"
+# Shared metadata and payer review history live in flats.yaml; flat records are
+# split by block in flats_a.yaml, flats_b.yaml, and flats_c.yaml.
 flat_dimensions: "flat_dimensions.yaml"
 
 columns:

@@ -5,7 +5,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any
+from typing import Any, Mapping
 
 import yaml
 
@@ -20,6 +20,7 @@ class FlatInfo:
     block: str
     sqft: int
     payer_names: list[str] = field(default_factory=list)
+    upi_ids: list[str] = field(default_factory=list)
     notes: str = ""
 
     @property
@@ -39,6 +40,23 @@ class FlatsRegistry:
         with path.open(encoding="utf-8") as handle:
             raw: dict[str, Any] = yaml.safe_load(handle)
 
+        flats_raw = dict(raw.get("flats", {}))
+        block_files = raw.get("block_files", {})
+        if block_files:
+            for block, block_file in block_files.items():
+                block_path = Path(block_file)
+                if not block_path.is_absolute():
+                    block_path = path.parent / block_path
+                with block_path.open(encoding="utf-8") as handle:
+                    block_raw = yaml.safe_load(handle) or {}
+                block_flats = block_raw.get("flats", block_raw)
+                if not isinstance(block_flats, Mapping):
+                    raise ValueError(f"Expected a flat mapping in {block_path}")
+                for flat_no, entry in block_flats.items():
+                    if flat_no in flats_raw:
+                        raise ValueError(f"Duplicate flat {flat_no} in registry files")
+                    flats_raw[flat_no] = entry
+
         sqft_map: dict[str, int] = {}
         if dimensions_path and dimensions_path.exists():
             with dimensions_path.open(encoding="utf-8") as handle:
@@ -49,7 +67,7 @@ class FlatsRegistry:
             }
 
         flats: dict[str, FlatInfo] = {}
-        for flat_no, entry in raw.get("flats", {}).items():
+        for flat_no, entry in flats_raw.items():
             flat_key = flat_no.upper()
             sqft = sqft_map.get(flat_key, int(entry.get("sqft", 0)))
             flats[flat_key] = FlatInfo(
@@ -57,6 +75,7 @@ class FlatsRegistry:
                 block=entry.get("block", flat_no[0]),
                 sqft=sqft,
                 payer_names=entry.get("payer_names", []) or [],
+                upi_ids=entry.get("upi_ids", []) or [],
                 notes=entry.get("notes", "") or "",
             )
 
@@ -76,6 +95,23 @@ class FlatsRegistry:
                 if normalized:
                     index[normalized] = flat_no
         self._payer_index = index
+
+    def lookup_by_upi_id(self, narration: str) -> FlatInfo | None:
+        """Find a unique flat whose configured UPI ID occurs in the narration."""
+        normalized_narration = narration.casefold()
+        matches: dict[str, FlatInfo] = {}
+        for flat_no, info in self.flats.items():
+            for upi_id in info.upi_ids:
+                upi_id = upi_id.strip()
+                if upi_id and re.search(
+                    rf"(?<![\w.+-]){re.escape(upi_id)}(?![\w.+-])",
+                    normalized_narration,
+                    re.IGNORECASE,
+                ):
+                    matches[flat_no] = info
+                    break
+
+        return next(iter(matches.values())) if len(matches) == 1 else None
 
     def get(self, flat_no: str | None) -> FlatInfo | None:
         if not flat_no:
@@ -97,8 +133,14 @@ class FlatsRegistry:
 
         return None
 
-    def resolve_flat(self, flat_no: str | None, payer_name: str) -> tuple[str | None, FlatInfo | None]:
+    def resolve_flat(
+        self, flat_no: str | None, payer_name: str, narration: str = ""
+    ) -> tuple[str | None, FlatInfo | None]:
         info = self.get(flat_no)
+        if info:
+            return info.flat_no, info
+
+        info = self.lookup_by_upi_id(narration)
         if info:
             return info.flat_no, info
 

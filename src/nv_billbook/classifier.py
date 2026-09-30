@@ -208,7 +208,9 @@ def classify_transactions(
 
         sqft_value = None
         if flats_registry:
-            resolved_flat, flat_info = flats_registry.resolve_flat(flat_no, payer)
+            resolved_flat, flat_info = flats_registry.resolve_flat(
+                flat_no, payer, narration
+            )
             if resolved_flat and not flat_no:
                 flat_no = resolved_flat
             if flat_info:

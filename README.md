@@ -275,7 +275,10 @@ latestNVBillBook/
 ├── requirements.txt
 ├── config.yaml              # Local HDFC settings (gitignored)
 ├── config.example.yaml      # Template — safe to commit
-├── flats.yaml               # Flat registry — owner names & payer aliases
+├── flats.yaml               # Shared registry metadata and unmapped payers
+├── flats_a.yaml             # A-Block flat records
+├── flats_b.yaml             # B-Block flat records
+├── flats_c.yaml             # C-Block flat records
 ├── flats.example.yaml       # Backup template of flat registry
 ├── data/
 │   ├── input/               # Optional: drop statement files here
@@ -299,7 +302,13 @@ latestNVBillBook/
 
 ---
 
-## Flat registry (`flats.yaml`)
+## Flat registry (`flats.yaml` and block files)
+
+Shared registry metadata (including maintenance and water-bill settings) and
+unmapped payer history live in `flats.yaml`. Flat records are split by block
+across `flats_a.yaml`, `flats_b.yaml`, and `flats_c.yaml`; the `block_files`
+mapping in `flats.yaml` connects them. Each flat record can include
+`payer_names` and `upi_ids` aliases.
 
 Reference file for all **200 flats**. Built from two sources only:
 

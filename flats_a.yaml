@@ -1,0 +1,551 @@
+flats:
+  A001:
+    block: A
+    sqft: 1172
+    payer_names:
+    - PRAMIT PANDA
+    notes: ''
+    upi_ids: []
+  A002:
+    block: A
+    sqft: 1096
+    payer_names: []
+    notes: ''
+    upi_ids: []
+  A003:
+    block: A
+    sqft: 1096
+    payer_names:
+    - NETHRAVATHI  S
+    notes: ''
+    upi_ids: []
+  A004:
+    block: A
+    sqft: 1302
+    payer_names:
+    - LOKESH SETTY
+    notes: ''
+    upi_ids: []
+  A005:
+    block: A
+    sqft: 1149
+    payer_names: []
+    notes: ''
+    upi_ids: []
+  A006:
+    block: A
+    sqft: 1118
+    payer_names:
+    - SOMASHEKAR PATIL
+    notes: ''
+    upi_ids: []
+  A007:
+    block: A
+    sqft: 1106
+    payer_names: []
+    notes: ''
+    upi_ids: []
+  A008:
+    block: A
+    sqft: 1547
+    payer_names:
+    - CHENNAMADHAVUNIABHINAY
+    notes: ''
+    upi_ids: []
+  A009:
+    block: A
+    sqft: 1552
+    payer_names:
+    - ARUN BALAGOPAL
+    notes: ''
+    upi_ids: []
+  A010:
+    block: A
+    sqft: 1154
+    payer_names:
+    - EBIN KANAGA JOZER
+    notes: ''
+    upi_ids: []
+  A011:
+    block: A
+    sqft: 1118
+    payer_names:
+    - ASHWIN KOTEBAVI
+    notes: ''
+    upi_ids: []
+  A012:
+    block: A
+    sqft: 1086
+    payer_names:
+    - BISWAJIT BURAGOHAIN
+    notes: ''
+    upi_ids: []
+  A013:
+    block: A
+    sqft: 1189
+    payer_names:
+    - DORA RAGHAVENDRA VINAY NAGARI
+    notes: ''
+    upi_ids: []
+  A014:
+    block: A
+    sqft: 1110
+    payer_names: []
+    notes: ''
+    upi_ids: []
+  A015:
+    block: A
+    sqft: 1260
+    payer_names:
+    - VADLAMUDIUMARANI
+    - VADLAMUDI UMA RANI
+    notes: ''
+    upi_ids: []
+  A016:
+    block: A
+    sqft: 1110
+    payer_names:
+    - RAKSHITH M
+    notes: ''
+    upi_ids: []
+  A017:
+    block: A
+    sqft: 1260
+    payer_names: []
+    notes: ''
+    upi_ids: []
+  A018:
+    block: A
+    sqft: 1110
+    payer_names:
+    - DEEPAKKUMARMAHATO
+    notes: ''
+    upi_ids: []
+  A019:
+    block: A
+    sqft: 1264
+    payer_names:
+    - GYANUBA URANAKAR
+    notes: ''
+    upi_ids: []
+  A020:
+    block: A
+    sqft: 1110
+    payer_names:
+    - M H MAHALENGAM
+    notes: ''
+    upi_ids: []
+  A101:
+    block: A
+    sqft: 1172
+    payer_names:
+    - SHARATH CHANDRAN
+    notes: ''
+    upi_ids: []
+  A102:
+    block: A
+    sqft: 1192
+    payer_names: []
+    notes: ''
+    upi_ids: []
+  A103:
+    block: A
+    sqft: 1192
+    payer_names: []
+    notes: ''
+    upi_ids: []
+  A104:
+    block: A
+    sqft: 1424
+    payer_names: []
+    notes: ''
+    upi_ids: []
+  A105:
+    block: A
+    sqft: 1210
+    payer_names:
+    - ANNATAM DEY
+    notes: ''
+    upi_ids: []
+  A106:
+    block: A
+    sqft: 1118
+    payer_names:
+    - T JAYACHANDRAN
+    notes: ''
+    upi_ids: []
+  A107:
+    block: A
+    sqft: 1232
+    payer_names:
+    - KAVITHA KRISNAMURTHY
+    notes: ''
+    upi_ids: []
+  A108:
+    block: A
+    sqft: 1547
+    payer_names:
+    - SUBHASCHANDRA SHIRIY
+    notes: ''
+    upi_ids: []
+  A109:
+    block: A
+    sqft: 1552
+    payer_names:
+    - VARUNA KAKATHKAR
+    notes: ''
+    upi_ids: []
+  A110:
+    block: A
+    sqft: 1212
+    payer_names:
+    - PAVEENA K
+    notes: ''
+    upi_ids: []
+  A111:
+    block: A
+    sqft: 1178
+    payer_names:
+    - SRINIVASA V S
+    notes: ''
+    upi_ids: []
+  A112:
+    block: A
+    sqft: 1144
+    payer_names:
+    - SANKETH S JAIN
+    notes: ''
+    upi_ids: []
+  A113:
+    block: A
+    sqft: 1189
+    payer_names:
+    - SOUMYARANJAN MOHAPATRA
+    notes: ''
+    upi_ids: []
+  A114:
+    block: A
+    sqft: 1168
+    payer_names:
+    - SURESH GUJJAR
+    notes: ''
+    upi_ids: []
+  A115:
+    block: A
+    sqft: 1260
+    payer_names:
+    - AKSHAR GHANSHYAMBHAI BAROT
+    notes: ''
+    upi_ids: []
+  A116:
+    block: A
+    sqft: 1228
+    payer_names:
+    - MILAN KUILA
+    notes: ''
+    upi_ids: []
+  A117:
+    block: A
+    sqft: 1260
+    payer_names: []
+    notes: ''
+    upi_ids: []
+  A118:
+    block: A
+    sqft: 1228
+    payer_names:
+    - SAIKUMARGUNNA
+    - SAIKUMAR GUNNA
+    notes: ''
+    upi_ids: []
+  A119:
+    block: A
+    sqft: 1264
+    payer_names:
+    - MR RAGHU SRINIVASAN
+    notes: ''
+    upi_ids: []
+  A120:
+    block: A
+    sqft: 1228
+    payer_names:
+    - SAUMYA RANJAN MOHAPATRA
+    notes: ''
+    upi_ids: []
+  A201:
+    block: A
+    sqft: 1172
+    payer_names:
+    - KAVYAK BABU ANUMUKONDA
+    notes: ''
+    upi_ids: []
+  A202:
+    block: A
+    sqft: 1192
+    payer_names: []
+    notes: ''
+    upi_ids: []
+  A203:
+    block: A
+    sqft: 1192
+    payer_names:
+    - ANKITA KOUL
+    notes: ''
+    upi_ids: []
+  A204:
+    block: A
+    sqft: 1424
+    payer_names: []
+    notes: ''
+    upi_ids: []
+  A205:
+    block: A
+    sqft: 1210
+    payer_names:
+    - LOVELYKANT
+    notes: ''
+    upi_ids: []
+  A206:
+    block: A
+    sqft: 1118
+    payer_names: []
+    notes: ''
+    upi_ids: []
+  A207:
+    block: A
+    sqft: 1232
+    payer_names:
+    - BAISHNABI SAHU
+    notes: ''
+    upi_ids: []
+  A208:
+    block: A
+    sqft: 1547
+    payer_names:
+    - RANJITH MENON P V
+    notes: ''
+    upi_ids: []
+  A209:
+    block: A
+    sqft: 1552
+    payer_names:
+    - KIRAN KUMAR BARLA
+    notes: ''
+    upi_ids: []
+  A210:
+    block: A
+    sqft: 1212
+    payer_names: []
+    notes: ''
+    upi_ids: []
+  A211:
+    block: A
+    sqft: 1178
+    payer_names:
+    - MITHILESH KUMAR
+    notes: ''
+    upi_ids: []
+  A212:
+    block: A
+    sqft: 1144
+    payer_names:
+    - YASH SINHA
+    - SRINIVAS M A
+    notes: ''
+    upi_ids: []
+  A213:
+    block: A
+    sqft: 1189
+    payer_names:
+    - SIDHARTH P
+    notes: ''
+    upi_ids: []
+  A214:
+    block: A
+    sqft: 1168
+    payer_names:
+    - K B MOHAN
+    notes: ''
+    upi_ids: []
+  A215:
+    block: A
+    sqft: 1260
+    payer_names:
+    - SANDEEP ANTHUR
+    notes: ''
+    upi_ids: []
+  A216:
+    block: A
+    sqft: 1228
+    payer_names:
+    - NAVEEN N
+    notes: ''
+    upi_ids: []
+  A217:
+    block: A
+    sqft: 1260
+    payer_names: []
+    notes: ''
+    upi_ids: []
+  A218:
+    block: A
+    sqft: 1228
+    payer_names:
+    - MR HARSH  VATS
+    - HARSH VATS
+    notes: ''
+    upi_ids: []
+  A219:
+    block: A
+    sqft: 1264
+    payer_names: []
+    notes: ''
+    upi_ids: []
+  A220:
+    block: A
+    sqft: 1228
+    payer_names:
+    - EARESH KUMAR L
+    notes: ''
+    upi_ids: []
+  A301:
+    block: A
+    sqft: 1172
+    payer_names:
+    - BHASKARUNI SWAROOP
+    notes: ''
+    upi_ids: []
+  A302:
+    block: A
+    sqft: 1192
+    payer_names:
+    - ARCHIT JAIN
+    notes: ''
+    upi_ids: []
+  A303:
+    block: A
+    sqft: 1192
+    payer_names:
+    - MR RAJKUMAR MILAN  S
+    notes: ''
+    upi_ids: []
+  A304:
+    block: A
+    sqft: 1424
+    payer_names:
+    - GOUTAM B K
+    notes: ''
+    upi_ids: []
+  A305:
+    block: A
+    sqft: 1210
+    payer_names:
+    - SUYASH SHRESTHA
+    notes: ''
+    upi_ids: []
+  A306:
+    block: A
+    sqft: 1118
+    payer_names:
+    - VIJAYAKUMAR RAJU  SO
+    notes: ''
+    upi_ids: []
+  A307:
+    block: A
+    sqft: 1232
+    payer_names:
+    - K  MUKUNTH
+    notes: ''
+    upi_ids: []
+  A308:
+    block: A
+    sqft: 1547
+    payer_names:
+    - MALLAVARAPU AROGYA MARY
+    - PUDOTARAJIVRAICHOWDARI
+    - PUDOTA RAJIV RAI CHO
+    notes: ''
+    upi_ids: []
+  A309:
+    block: A
+    sqft: 1552
+    payer_names:
+    - NSEETHARAM
+    - N  SEETHARAM
+    notes: ''
+    upi_ids: []
+  A310:
+    block: A
+    sqft: 1212
+    payer_names:
+    - GOUTHAM S
+    notes: ''
+    upi_ids: []
+  A311:
+    block: A
+    sqft: 1178
+    payer_names:
+    - ANN JOVITA JAMES
+    notes: ''
+    upi_ids: []
+  A312:
+    block: A
+    sqft: 1144
+    payer_names: []
+    notes: ''
+    upi_ids: []
+  A313:
+    block: A
+    sqft: 1189
+    payer_names:
+    - VIVEKANANDA SHARMA
+    notes: ''
+    upi_ids: []
+  A314:
+    block: A
+    sqft: 1168
+    payer_names: []
+    notes: ''
+    upi_ids: []
+  A315:
+    block: A
+    sqft: 1260
+    payer_names:
+    - UTSAV  PATEL
+    notes: ''
+    upi_ids: []
+  A316:
+    block: A
+    sqft: 1228
+    payer_names:
+    - ANU RAJ T
+    notes: ''
+    upi_ids: []
+  A317:
+    block: A
+    sqft: 1260
+    payer_names:
+    - D  VIVEK
+    - D VIVEKMANDULA SUPRI
+    notes: ''
+    upi_ids: []
+  A318:
+    block: A
+    sqft: 1228
+    payer_names:
+    - KUMAR ROSHAN
+    notes: ''
+    upi_ids: []
+  A319:
+    block: A
+    sqft: 1264
+    payer_names: []
+    notes: ''
+    upi_ids: []
+  A320:
+    block: A
+    sqft: 1228
+    payer_names:
+    - MANU N
+    notes: ''
+    upi_ids: []

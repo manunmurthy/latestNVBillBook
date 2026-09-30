@@ -33,6 +33,8 @@ flats:
     sqft: 1172
     payer_names:
     - PRAMIT PANDA
+    upi_ids:
+    - pramit@bank
     notes: ''
   A002:
     block: A

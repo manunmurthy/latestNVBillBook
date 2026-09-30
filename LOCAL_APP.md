@@ -4,7 +4,7 @@ This is the everyday, no-command interface for generating Nava Vaibhva reports. 
 
 ## First-time setup
 
-1. Keep `config.yaml`, `flats.yaml`, and `flat_dimensions.yaml` in the main project folder. `config.yaml` is already present in the working installation.
+1. Keep `config.yaml`, `flats.yaml`, `flats_a.yaml`, `flats_b.yaml`, `flats_c.yaml`, and `flat_dimensions.yaml` in the main project folder. `config.yaml` is already present in the working installation.
 2. Open Terminal in the project folder and run the following once:
 
    ```bash
@@ -39,7 +39,7 @@ A full monthly report is created for every flat in the registry, exactly as with
 3. Leave the flat field empty to include every flat.
 4. Generate, preview, and download the workbook.
 
-The app validates flat numbers against `flats.yaml`. Before making a history report, ensure `meta.water_bills_by_month` in `flats.yaml` has a water-bill value for every month in the selected period.
+The app validates flat numbers using the block files listed in `flats.yaml`. Before making a history report, ensure `meta.water_bills_by_month` in `flats.yaml` has a water-bill value for every month in the selected period.
 
 ## Where reports are saved
 
