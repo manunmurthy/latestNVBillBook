@@ -29,7 +29,8 @@ flats:
   A005:
     block: A
     sqft: 1149
-    payer_names: []
+    payer_names:
+    - PRANJAL ARABINDA MED
     notes: ''
     upi_ids: []
   A006:
@@ -111,7 +112,8 @@ flats:
   A017:
     block: A
     sqft: 1260
-    payer_names: []
+    payer_names:
+    - K B PONNAMMA
     notes: ''
     upi_ids: []
   A018:
@@ -151,7 +153,8 @@ flats:
   A103:
     block: A
     sqft: 1192
-    payer_names: []
+    payer_names:
+    - SIVARAMAN M
     notes: ''
     upi_ids: []
   A104:
@@ -235,6 +238,7 @@ flats:
     sqft: 1260
     payer_names:
     - AKSHAR GHANSHYAMBHAI BAROT
+    - VIPUL BHARDWAJ
     notes: ''
     upi_ids: []
   A116:
@@ -292,12 +296,14 @@ flats:
     sqft: 1192
     payer_names:
     - ANKITA KOUL
+    - SUNIL KUMAR M
     notes: ''
     upi_ids: []
   A204:
     block: A
     sqft: 1424
-    payer_names: []
+    payer_names:
+    - JAYASUDHA J C
     notes: ''
     upi_ids: []
   A205:
@@ -466,6 +472,7 @@ flats:
     - MALLAVARAPU AROGYA MARY
     - PUDOTARAJIVRAICHOWDARI
     - PUDOTA RAJIV RAI CHO
+    - AROGYA MARY MALLAVARAPU
     notes: ''
     upi_ids: []
   A309:
@@ -542,7 +549,8 @@ flats:
   A319:
     block: A
     sqft: 1264
-    payer_names: []
+    payer_names:
+    - HARI  AKHIL
     notes: ''
     upi_ids: []
   A320:

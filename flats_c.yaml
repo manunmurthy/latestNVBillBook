@@ -220,6 +220,7 @@ flats:
     sqft: 1192
     payer_names:
     - VINOD R PAI
+    - VINOD RAMACHANDRA PAI
     notes: ''
     upi_ids: []
   C115:
@@ -362,13 +363,15 @@ flats:
   C217:
     block: C
     sqft: 1247
-    payer_names: []
+    payer_names:
+    - M GANESAN
     notes: ''
     upi_ids: []
   C218:
     block: C
     sqft: 1247
-    payer_names: []
+    payer_names:
+    - VENKATA SOMA SEKHAR POTHABATHULA
     notes: ''
     upi_ids: []
   C301:
@@ -381,7 +384,8 @@ flats:
   C302:
     block: C
     sqft: 1240
-    payer_names: []
+    payer_names:
+    - ASHWIJA K R
     notes: ''
     upi_ids: []
   C303:

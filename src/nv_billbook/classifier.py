@@ -71,6 +71,12 @@ def extract_income_type(text: str) -> str:
 def extract_payer_name(text: str) -> str:
     narration = text.strip()
 
+    # HDFC fund transfer narrations often put the payer after a flat/purpose
+    # segment and end with a bank-generated F reference.
+    ft_match = re.search(r"\bFT-[^-]+-[^-]+-(.+?)-F\d+\s*$", narration, re.IGNORECASE)
+    if ft_match:
+        return ft_match.group(1).strip()
+
     if narration.upper().startswith("UPI-"):
         body = narration[4:]
         parts = body.split("-")

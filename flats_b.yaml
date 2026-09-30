@@ -57,6 +57,7 @@ flats:
     payer_names:
     - BALASUBRAMANYA S
     - NAGESH KURAVADI
+    - T ANTHONY RAJ
     notes: ''
     upi_ids: []
   B010:
@@ -255,7 +256,8 @@ flats:
   B302:
     block: B
     sqft: 1518
-    payer_names: []
+    payer_names:
+    - SUMEET KUMAR CHANDRA
     notes: ''
     upi_ids: []
   B303:
