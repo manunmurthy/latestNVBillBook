@@ -14,6 +14,7 @@ from nv_billbook.parser import (
     infer_report_month,
     parse_hdfc_statement,
 )
+from nv_billbook.reconciliation import build_maintenance_reconciliation
 from nv_billbook.reporter import write_monthly_report
 
 
@@ -113,6 +114,34 @@ def _process_statement(
         f"Credits: {len(credits)} (₹{credits['credit'].sum():,.2f}) | "
         f"Debits: {len(debits)} (₹{debits['debit'].sum():,.2f})"
     )
+    if flats_registry:
+        identified_flats = set()
+        if "flat_no" in credits.columns:
+            for flat_no in credits["flat_no"]:
+                info = (
+                    flats_registry.get(flat_no)
+                    if isinstance(flat_no, str)
+                    else None
+                )
+                if info:
+                    identified_flats.add(info.flat_no)
+        reconciliation = build_maintenance_reconciliation(
+            credits,
+            flats_registry,
+            water_bill_per_month=water_bill_per_month,
+        )
+        status_counts = reconciliation["Status"].value_counts()
+        print(
+            f"  Flat identification: {len(identified_flats)}/{len(flats_registry.flats)} "
+            "flats have at least one identified credit"
+        )
+        print(
+            "  Maintenance status: "
+            + " | ".join(
+                f"{status} {int(status_counts.get(status, 0))}"
+                for status in ("Paid", "Short", "Excess", "Pending")
+            )
+        )
     print(f"  Report written: {output_path}")
     return output_path
 

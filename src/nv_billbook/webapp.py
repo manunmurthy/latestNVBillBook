@@ -120,7 +120,7 @@ def create_app(project_root: Path | None = None) -> Flask:
 
 def main() -> None:
     app = create_app()
-    print("Nava Vaibhva Bill Book is ready at http://127.0.0.1:5000")
+    print("Nava Vaibhva Bill Book is ready at http://localhost:5000")
     app.run(host="127.0.0.1", port=5000, debug=False)
 
 
