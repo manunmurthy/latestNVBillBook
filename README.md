@@ -22,7 +22,7 @@ The following is implemented and working:
 | **Expense categories** | Auto-tags debits (STP, gardening, electrical, solar, water, fuel, garbage, telecom, etc.) |
 | **Maintenance reconciliation** | Calculates expected maintenance, water bill, paid amount, dues, excess, and status for every registered flat |
 | **Excel report** | One workbook per month with 6 sheets, including Maintenance Reconciliation |
-| **Flexible input** | Point to a single file, a folder, or use `data/input/` |
+| **Flexible input** | Point to a single file, a folder, or use `data/input/`; read Excel, PDF, or both |
 
 **Verified with:** `Acct_Statement_June2026.xls` — 218 transactions processed successfully.
 
@@ -45,11 +45,19 @@ Output file: **`data/output/YYYY-MM_summary.xlsx`**
 
 ## Multi-month collection history
 
-For one HDFC statement that covers 3, 6, or 12 calendar months, create a separate consolidated workbook without changing the monthly report:
+For one HDFC statement that covers 3, 6, or 12 calendar months, create a separate consolidated workbook without changing the monthly report. Excel and PDF statements use the same command:
 
 ```bash
 PYTHONPATH=src python3 -m nv_billbook.history \
   --input "/full/path/to/financial_year_HDFC_statement.xls"
+```
+
+For a PDF statement:
+
+```bash
+PYTHONPATH=src python3 -m nv_billbook.history \
+  --input "/full/path/to/financial_year_HDFC_statement.pdf" \
+  --input-format pdf
 ```
 
 The output is `data/output/YYYY-MM_to_YYYY-MM_collection_history.xlsx` with one worksheet per registered flat. For example, the first tab is `A001` and contains only A001 data:
@@ -82,6 +90,8 @@ PYTHONPATH=src python3 -m nv_billbook.history \
 ```
 
 You can still combine this with `--flat A001` or a comma-separated list if you only want selected flats.
+
+For a folder containing a mix of Excel and PDF statements, use `--input-format both`. Matching transactions from the same statement in both formats are deduplicated.
 
 | Section in each flat worksheet | What it contains |
 |---|---|
@@ -182,6 +192,27 @@ This creates an `.xlsx` file with a `Transactions` sheet next to the PDF by defa
 
 Use this when the bank gives you a PDF instead of an Excel export. If the PDF is password-protected, unlock it first or provide an unprotected copy.
 
+**Option E — Read the PDF directly:**
+
+The monthly report can read an HDFC PDF directly without converting it first:
+
+```bash
+PYTHONPATH=src python3 -m nv_billbook.main \
+  --input "~/Downloads/NVBankStatements/Acct_Statement_July2026.pdf" \
+  --input-format pdf
+```
+
+For a folder containing mixed Excel and PDF statements, use `both`:
+
+```bash
+PYTHONPATH=src python3 -m nv_billbook.main \
+  --input "~/Downloads/NVBankStatements/" \
+  --input-format both \
+  --all
+```
+
+`auto` is the default and selects the parser from each file extension. In the local browser interface, choose Automatic, Excel / CSV only, PDF only, or Excel / CSV and PDF. When the same statement is supplied in both formats for collection history, matching transactions are deduplicated. For monthly reports, supply one source file per month to avoid replacing one report with another copy of the same month.
+
 ### Step 4 — Open the report
 
 ```bash
@@ -208,7 +239,9 @@ open data/output/2026-07_summary.xlsx      # macOS
 | `--month 2026-07` | Process only files matching July 2026 (uses `data/input/`) |
 | `--config path/to/config.yaml` | Use a different config file |
 | `--water-bill 287` | Set the fixed per-flat water bill for this report; overrides `flats.yaml` |
-| `--input /path/to/file.pdf` | Convert a PDF statement into Excel with `nv_billbook.pdf_to_excel` |
+| `--input-format auto` | Read files based on extension; also supports `excel`, `pdf`, and `both` |
+| `--input /path/to/file.pdf` | Read an HDFC PDF directly with the main report command |
+| `python3 -m nv_billbook.pdf_to_excel --input /path/to/file.pdf` | Convert a PDF to a standalone Excel transaction sheet |
 
 Example output when it succeeds:
 

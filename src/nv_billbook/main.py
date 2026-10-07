@@ -10,8 +10,11 @@ from nv_billbook.classifier import classify_transactions, split_by_type
 from nv_billbook.config import Config
 from nv_billbook.flats_registry import FlatsRegistry
 from nv_billbook.parser import (
+    INPUT_FORMATS,
     find_statement_files,
     infer_report_month,
+    is_supported_extension,
+    normalize_input_format,
     parse_hdfc_statement,
 )
 from nv_billbook.reconciliation import build_maintenance_reconciliation
@@ -45,21 +48,36 @@ def parse_args() -> argparse.Namespace:
         type=float,
         help="Fixed per-flat monthly water bill for this report (overrides flats.yaml)",
     )
+    parser.add_argument(
+        "--input-format",
+        choices=INPUT_FORMATS,
+        default="auto",
+        help="Read Excel/CSV, PDF, both, or detect automatically (default: auto)",
+    )
     return parser.parse_args()
 
 
-def _resolve_input_paths(config: Config, input_arg: str | None) -> list[Path]:
+def _resolve_input_paths(
+    config: Config,
+    input_arg: str | None,
+    input_format: str = "auto",
+) -> list[Path]:
+    input_format = normalize_input_format(input_format)
     if input_arg:
         path = Path(input_arg)
         if path.is_file():
+            if not is_supported_extension(path, input_format):
+                raise ValueError(
+                    f"{path.name} is not allowed with --input-format {input_format}."
+                )
             return [path]
         if path.is_dir():
-            return find_statement_files(path)
+            return find_statement_files(path, input_format)
         raise FileNotFoundError(f"Input path not found: {path}")
 
     if not config.input_dir.exists():
         config.input_dir.mkdir(parents=True, exist_ok=True)
-    return find_statement_files(config.input_dir)
+    return find_statement_files(config.input_dir, input_format)
 
 
 def _load_flats_registry(config: Config) -> FlatsRegistry | None:
@@ -167,8 +185,8 @@ def main() -> None:
     month_filter = args.month if not args.all else None
 
     try:
-        input_paths = _resolve_input_paths(config, args.input)
-    except FileNotFoundError as exc:
+        input_paths = _resolve_input_paths(config, args.input, args.input_format)
+    except (FileNotFoundError, ValueError) as exc:
         print(str(exc), file=sys.stderr)
         sys.exit(1)
 

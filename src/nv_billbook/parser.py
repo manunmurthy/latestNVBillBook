@@ -1,4 +1,4 @@
-"""Parse HDFC bank statement exports (XLS/XLSX/CSV)."""
+"""Parse HDFC bank statement exports (XLS/XLSX/CSV/PDF)."""
 
 from __future__ import annotations
 
@@ -17,6 +17,9 @@ STATEMENT_PERIOD_RE = re.compile(
     re.IGNORECASE,
 )
 HEADER_MARKERS = ("date", "narration", "withdrawal amt.", "deposit amt.")
+EXCEL_EXTENSIONS = frozenset({".xls", ".xlsx", ".xlsm", ".csv"})
+PDF_EXTENSIONS = frozenset({".pdf"})
+INPUT_FORMATS = ("auto", "excel", "pdf", "both")
 
 
 @dataclass
@@ -31,6 +34,26 @@ class StatementMeta:
 class ParsedStatement:
     meta: StatementMeta
     transactions: pd.DataFrame
+
+
+def normalize_input_format(value: str | None) -> str:
+    """Return a supported input mode, defaulting to automatic detection."""
+    normalized = (value or "auto").strip().lower()
+    if normalized not in INPUT_FORMATS:
+        choices = ", ".join(INPUT_FORMATS)
+        raise ValueError(f"Unsupported input format: {value}. Choose from: {choices}.")
+    return normalized
+
+
+def is_supported_extension(path: Path, input_format: str = "auto") -> bool:
+    """Return whether a statement extension is allowed by the selected mode."""
+    mode = normalize_input_format(input_format)
+    suffix = path.suffix.lower()
+    if mode == "pdf":
+        return suffix in PDF_EXTENSIONS
+    if mode == "excel":
+        return suffix in EXCEL_EXTENSIONS
+    return suffix in EXCEL_EXTENSIONS or suffix in PDF_EXTENSIONS
 
 
 def _read_raw_table(path: Path) -> pd.DataFrame:
@@ -114,6 +137,50 @@ def _parse_date(value: object, fmt: str) -> date | None:
 
 def parse_hdfc_statement(path: Path, config: Config) -> ParsedStatement:
     """Parse a single HDFC statement file into normalized transactions."""
+    if path.suffix.lower() in PDF_EXTENSIONS:
+        from nv_billbook.pdf_to_excel import (
+            extract_hdfc_pdf_metadata,
+            extract_hdfc_pdf_transactions,
+        )
+
+        raw_pdf = extract_hdfc_pdf_transactions(path)
+        metadata = extract_hdfc_pdf_metadata(path)
+        rows: list[dict[str, object]] = []
+        for _, record in raw_pdf.iterrows():
+            date_text = str(record.get("Date", "")).strip()
+            transaction_date = _parse_date(date_text, "%d/%m/%y")
+            amount = _to_number(record.get("Amount")) or 0.0
+            transaction_type = str(record.get("Transaction Type", "")).strip()
+            debit = amount if transaction_type == "Debit" else 0.0
+            credit = amount if transaction_type == "Credit" else 0.0
+            rows.append(
+                {
+                    "date": transaction_date,
+                    "date_str": date_text,
+                    "narration": str(record.get("Narration", "")).strip(),
+                    "reference": str(record.get("Reference", "")).strip(),
+                    "value_date": _parse_date(record.get("Value Date"), "%d/%m/%y"),
+                    "debit": debit,
+                    "credit": credit,
+                    "balance": _to_number(record.get("Closing Balance")),
+                }
+            )
+
+        transactions = pd.DataFrame(rows)
+        if transactions.empty:
+            raise ValueError(f"No transactions found in {path.name}")
+        transactions["amount"] = transactions["credit"] - transactions["debit"]
+        transactions["source_file"] = path.name
+        return ParsedStatement(
+            meta=StatementMeta(
+                source_file=path,
+                period_start=metadata.get("period_start"),
+                period_end=metadata.get("period_end"),
+                account_no=metadata.get("account_no"),
+            ),
+            transactions=transactions,
+        )
+
     raw = _read_raw_table(path)
     meta = _extract_metadata(raw, path)
     header_row = _find_header_row(raw)
@@ -182,8 +249,15 @@ def infer_report_month(meta: StatementMeta, transactions: pd.DataFrame) -> str:
     raise ValueError("Could not determine report month from statement")
 
 
-def find_statement_files(input_dir: Path) -> list[Path]:
-    patterns = ("*.xls", "*.xlsx", "*.xlsm", "*.csv")
+def find_statement_files(input_dir: Path, input_format: str = "auto") -> list[Path]:
+    mode = normalize_input_format(input_format)
+    patterns: tuple[str, ...]
+    if mode == "pdf":
+        patterns = ("*.pdf",)
+    elif mode == "excel":
+        patterns = ("*.xls", "*.xlsx", "*.xlsm", "*.csv")
+    else:
+        patterns = ("*.xls", "*.xlsx", "*.xlsm", "*.csv", "*.pdf")
     files: list[Path] = []
     for pattern in patterns:
         files.extend(sorted(input_dir.glob(pattern)))

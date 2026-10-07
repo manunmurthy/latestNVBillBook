@@ -19,8 +19,13 @@ from nv_billbook.collection_history import (
 from nv_billbook.config import Config
 from nv_billbook.history_reporter import write_collection_history_report
 from nv_billbook.main import _load_flats_registry
-from nv_billbook.parser import parse_hdfc_statement
-from nv_billbook.parser import find_statement_files
+from nv_billbook.parser import (
+    INPUT_FORMATS,
+    find_statement_files,
+    is_supported_extension,
+    normalize_input_format,
+    parse_hdfc_statement,
+)
 
 
 SUPPORTED_PERIOD_LENGTHS = {3, 6, 12}
@@ -43,6 +48,12 @@ def parse_args() -> argparse.Namespace:
         ),
     )
     parser.add_argument("--config", default="config.yaml", help="Path to config file")
+    parser.add_argument(
+        "--input-format",
+        choices=INPUT_FORMATS,
+        default="auto",
+        help="Read Excel/CSV, PDF, both, or detect automatically (default: auto)",
+    )
     return parser.parse_args()
 
 
@@ -64,22 +75,60 @@ def _parse_flat_filter(value: str, registry) -> list[str]:
     return selected
 
 
-def _load_statements(input_path: Path, config: Config) -> pd.DataFrame:
+def _deduplicate_transactions(transactions: pd.DataFrame) -> pd.DataFrame:
+    """Remove duplicate rows when the same statement is supplied as PDF and Excel."""
+    if transactions.empty:
+        return transactions
+    dedupe = transactions.copy()
+    dedupe["_narration_key"] = (
+        dedupe["narration"].fillna("").astype(str).str.upper().str.replace(r"\s+", "", regex=True)
+    )
+    key_columns = [
+        "date",
+        "_narration_key",
+        "reference",
+        "debit",
+        "credit",
+        "balance",
+    ]
+    return dedupe.drop_duplicates(subset=key_columns, keep="first").drop(
+        columns=["_narration_key"]
+    )
+
+
+def _load_statements(
+    input_path: Path,
+    config: Config,
+    input_format: str = "auto",
+) -> pd.DataFrame:
+    input_format = normalize_input_format(input_format)
     if input_path.is_file():
+        if not is_supported_extension(input_path, input_format):
+            raise ValueError(
+                f"{input_path.name} is not allowed with --input-format {input_format}."
+            )
         parsed = parse_hdfc_statement(input_path, config)
         return parsed.transactions
 
     if input_path.is_dir():
-        files = sorted(find_statement_files(input_path))
+        files = sorted(find_statement_files(input_path, input_format))
         if not files:
             raise FileNotFoundError(f"No statement files found in folder: {input_path}")
 
         frames: list[pd.DataFrame] = []
         for file_path in files:
-            parsed = parse_hdfc_statement(file_path, config)
+            try:
+                parsed = parse_hdfc_statement(file_path, config)
+            except Exception as exc:
+                print(f"Skipping {file_path.name}: {exc}", file=sys.stderr)
+                continue
             frames.append(parsed.transactions)
 
+        if not frames:
+            raise ValueError(f"No valid statement files found in folder: {input_path}")
+
         combined = pd.concat(frames, ignore_index=True)
+        combined = _deduplicate_transactions(combined)
         combined = combined.sort_values(
             by=["date", "source_file", "date_str"],
             kind="stable",
@@ -104,14 +153,14 @@ def main() -> None:
         sys.exit(1)
 
     try:
-        transactions = _load_statements(input_path, config)
-    except FileNotFoundError as exc:
+        transactions = _load_statements(input_path, config, args.input_format)
+    except (FileNotFoundError, ValueError) as exc:
         print(str(exc), file=sys.stderr)
         sys.exit(1)
 
     month_keys = month_keys_from_transactions(transactions)
     if input_path.is_dir():
-        statement_files = find_statement_files(input_path)
+        statement_files = find_statement_files(input_path, args.input_format)
         print(f"Loaded {len(statement_files)} statement file(s) from folder: {input_path}")
         print(f"Combining {len(month_keys)} month(s): {', '.join(month_keys)}")
     if input_path.is_file() and len(month_keys) not in SUPPORTED_PERIOD_LENGTHS:
