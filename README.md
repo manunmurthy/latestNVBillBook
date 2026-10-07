@@ -213,6 +213,27 @@ PYTHONPATH=src python3 -m nv_billbook.main \
 
 `auto` is the default and selects the parser from each file extension. In the local browser interface, choose Automatic, Excel / CSV only, PDF only, or Excel / CSV and PDF. When the same statement is supplied in both formats for collection history, matching transactions are deduplicated. For monthly reports, supply one source file per month to avoid replacing one report with another copy of the same month.
 
+**Option F — Extract selected months from a longer statement:**
+
+If one Excel or PDF statement covers a full year, select one or more transaction months:
+
+```bash
+PYTHONPATH=src python3 -m nv_billbook.main \
+  --input "/full/path/to/yearly_statement.pdf" \
+  --input-format pdf \
+  --months 2026-04,2026-07,2026-10
+```
+
+This creates one monthly workbook for each selected month. The same filter is available for collection history:
+
+```bash
+PYTHONPATH=src python3 -m nv_billbook.history \
+  --input "/full/path/to/yearly_statement.xlsx" \
+  --months 2026-04,2026-07,2026-10
+```
+
+Only those months are included in the history workbook. The month list may contain one month or any number of months present in the statement.
+
 ### Step 4 — Open the report
 
 ```bash
@@ -236,7 +257,8 @@ open data/output/2026-07_summary.xlsx      # macOS
 |---------|-------------|
 | `--input /path/to/file.xls` | Process one specific statement (`.xls`, `.xlsx`, `.xlsm`, or `.csv`) |
 | `--input /path/to/folder/ --all` | Process all statements in a folder (`.xls`, `.xlsx`, `.xlsm`, or `.csv`) |
-| `--month 2026-07` | Process only files matching July 2026 (uses `data/input/`) |
+| `--month 2026-07` | Extract only July 2026 transactions; also works when the source contains multiple months |
+| `--months 2026-04,2026-07` | Extract only the listed transaction months from a longer statement |
 | `--config path/to/config.yaml` | Use a different config file |
 | `--water-bill 287` | Set the fixed per-flat water bill for this report; overrides `flats.yaml` |
 | `--input-format auto` | Read files based on extension; also supports `excel`, `pdf`, and `both` |

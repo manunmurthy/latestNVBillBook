@@ -21,9 +21,11 @@ from nv_billbook.history_reporter import write_collection_history_report
 from nv_billbook.main import _load_flats_registry
 from nv_billbook.parser import (
     INPUT_FORMATS,
+    filter_transactions_by_months,
     find_statement_files,
     is_supported_extension,
     normalize_input_format,
+    parse_month_list,
     parse_hdfc_statement,
 )
 
@@ -48,6 +50,10 @@ def parse_args() -> argparse.Namespace:
         ),
     )
     parser.add_argument("--config", default="config.yaml", help="Path to config file")
+    parser.add_argument(
+        "--months",
+        help="Comma-separated months to include (for example 2026-04,2026-07)",
+    )
     parser.add_argument(
         "--input-format",
         choices=INPUT_FORMATS,
@@ -158,12 +164,31 @@ def main() -> None:
         print(str(exc), file=sys.stderr)
         sys.exit(1)
 
-    month_keys = month_keys_from_transactions(transactions)
+    try:
+        requested_months = parse_month_list(args.months)
+    except ValueError as exc:
+        print(str(exc), file=sys.stderr)
+        sys.exit(1)
+
+    available_months = month_keys_from_transactions(transactions)
+    if requested_months:
+        missing_months = [month for month in requested_months if month not in available_months]
+        if missing_months:
+            print(
+                "Requested month(s) not found in the statements: "
+                + ", ".join(missing_months),
+                file=sys.stderr,
+            )
+            sys.exit(1)
+        transactions = filter_transactions_by_months(transactions, requested_months)
+        month_keys = requested_months
+    else:
+        month_keys = available_months
     if input_path.is_dir():
         statement_files = find_statement_files(input_path, args.input_format)
         print(f"Loaded {len(statement_files)} statement file(s) from folder: {input_path}")
         print(f"Combining {len(month_keys)} month(s): {', '.join(month_keys)}")
-    if input_path.is_file() and len(month_keys) not in SUPPORTED_PERIOD_LENGTHS:
+    if input_path.is_file() and not requested_months and len(month_keys) not in SUPPORTED_PERIOD_LENGTHS:
         print(
             "This command requires transactions from 3, 6, or 12 calendar months; "
             f"found: {', '.join(month_keys) or 'none'}.",

@@ -1,15 +1,19 @@
 """Tests for HDFC statement parsing."""
 
 from pathlib import Path
+from datetime import date
 
+import pandas as pd
 import pytest
 
 from nv_billbook.classifier import classify_transactions, split_by_type
 from nv_billbook.config import Config
 from nv_billbook.parser import (
+    filter_transactions_by_months,
     find_statement_files,
     is_supported_extension,
     normalize_input_format,
+    parse_month_list,
     parse_hdfc_statement,
 )
 
@@ -66,3 +70,18 @@ def test_find_statement_files_supports_pdf_and_excel_modes(tmp_path) -> None:
         "b.xlsx",
         "c.pdf",
     ]
+
+
+def test_month_filter_accepts_one_or_more_months() -> None:
+    assert parse_month_list("2026-10, 2026-04,2026-10") == ["2026-04", "2026-10"]
+    transactions = pd.DataFrame(
+        {
+            "date": [
+                date(2026, 4, 5),
+                date(2026, 7, 5),
+            ]
+        }
+    )
+    result = filter_transactions_by_months(transactions, ["2026-07"])
+    assert len(result) == 1
+    assert result.iloc[0]["date"].month == 7

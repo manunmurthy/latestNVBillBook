@@ -12,6 +12,7 @@ import pandas as pd
 from nv_billbook.config import Config
 
 TRANSACTION_DATE_RE = re.compile(r"^\d{2}/\d{2}/\d{2}$")
+MONTH_KEY_RE = re.compile(r"^\d{4}-(0[1-9]|1[0-2])$")
 STATEMENT_PERIOD_RE = re.compile(
     r"Statement From\s*:\s*(\d{2}/\d{2}/\d{4})\s+To\s*:\s*(\d{2}/\d{2}/\d{4})",
     re.IGNORECASE,
@@ -54,6 +55,33 @@ def is_supported_extension(path: Path, input_format: str = "auto") -> bool:
     if mode == "excel":
         return suffix in EXCEL_EXTENSIONS
     return suffix in EXCEL_EXTENSIONS or suffix in PDF_EXTENSIONS
+
+
+def parse_month_list(value: str | None) -> list[str] | None:
+    """Parse a comma-separated YYYY-MM selection in chronological order."""
+    if value is None or not value.strip():
+        return None
+    months = [item.strip() for item in re.split(r"[,\s]+", value) if item.strip()]
+    invalid = [month for month in months if not MONTH_KEY_RE.fullmatch(month)]
+    if invalid:
+        raise ValueError(
+            "Invalid month(s): "
+            f"{', '.join(invalid)}. Use YYYY-MM, for example 2026-07."
+        )
+    return sorted(set(months))
+
+
+def filter_transactions_by_months(
+    transactions: pd.DataFrame,
+    months: list[str] | None,
+) -> pd.DataFrame:
+    """Keep only transactions whose posting date is in the selected months."""
+    if not months:
+        return transactions
+    month_keys = transactions["date"].map(
+        lambda value: value.strftime("%Y-%m") if isinstance(value, date) else ""
+    )
+    return transactions.loc[month_keys.isin(months)].copy()
 
 
 def _read_raw_table(path: Path) -> pd.DataFrame:
