@@ -22,6 +22,7 @@ The following is implemented and working:
 | **Expense categories** | Auto-tags debits (STP, gardening, electrical, solar, water, fuel, garbage, telecom, etc.) |
 | **Maintenance reconciliation** | Calculates expected maintenance, water bill, paid amount, dues, excess, and status for every registered flat |
 | **Excel report** | One workbook per month with 6 sheets, including Maintenance Reconciliation |
+| **Vendor payment history** | Vendor Summary and Vendor Transactions sheets across selected statements and months |
 | **Flexible input** | Point to a single file, a folder, or use `data/input/`; read Excel, PDF, or both |
 
 **Verified with:** `Acct_Statement_June2026.xls` — 218 transactions processed successfully.
@@ -255,6 +256,26 @@ PYTHONPATH=src python3 -m nv_billbook.main \
   --combine
 ```
 
+**Option H — Generate vendor payment history:**
+
+Create a vendor summary and detailed payment history from all debit transactions:
+
+```bash
+PYTHONPATH=src python3 -m nv_billbook.main \
+  --input "/full/path/to/statements" \
+  --input-format both \
+  --vendor-report
+```
+
+The workbook contains `Vendor Summary` and `Vendor Transactions`. To focus on one or more vendors, use a comma-separated filter:
+
+```bash
+PYTHONPATH=src python3 -m nv_billbook.main \
+  --input "/full/path/to/statements" \
+  --vendor-report \
+  --vendor "Gowrishankar,Anjaneyullu"
+```
+
 ### Step 4 — Open the report
 
 ```bash
@@ -281,6 +302,8 @@ open data/output/2026-07_summary.xlsx      # macOS
 | `--month 2026-07` | Extract only July 2026 transactions; also works when the source contains multiple months |
 | `--months 2026-04,2026-07` | Extract only the listed transaction months from a longer statement |
 | `--combine` | Combine all selected statement files into one consolidated workbook |
+| `--vendor-report` | Generate vendor summary and vendor payment history sheets |
+| `--vendor "name"` | Limit the vendor report to one or more matching payee names |
 | `--config path/to/config.yaml` | Use a different config file |
 | `--water-bill 287` | Set the fixed per-flat water bill for this report; overrides `flats.yaml` |
 | `--input-format auto` | Read files based on extension; also supports `excel`, `pdf`, and `both` |

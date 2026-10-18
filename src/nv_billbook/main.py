@@ -26,6 +26,7 @@ from nv_billbook.parser import (
 )
 from nv_billbook.reconciliation import build_maintenance_reconciliation
 from nv_billbook.reporter import write_monthly_report
+from nv_billbook.vendor_reporter import write_vendor_report
 
 
 def parse_args() -> argparse.Namespace:
@@ -70,6 +71,15 @@ def parse_args() -> argparse.Namespace:
         "--combine",
         action="store_true",
         help="Combine all selected statement files into one consolidated workbook",
+    )
+    parser.add_argument(
+        "--vendor-report",
+        action="store_true",
+        help="Create a vendor summary and vendor payment history workbook",
+    )
+    parser.add_argument(
+        "--vendor",
+        help="Optional vendor/payee filter; accepts a comma-separated list",
     )
     return parser.parse_args()
 
@@ -152,7 +162,7 @@ def _generate_reports(
         )
         report_month = f"{selected_months[0]}_to_{selected_months[-1]}"
         parsed_items = [(report_month, filtered_meta, filtered_transactions)]
-    else:
+    elif not args.vendor_report:
         selected_months = month_filter or [infer_report_month(parsed.meta, parsed.transactions)]
         parsed_items = []
         for report_month in selected_months:
@@ -280,6 +290,37 @@ def _combine_statements(paths: list[Path], config: Config) -> ParsedStatement:
     return ParsedStatement(meta=meta, transactions=transactions)
 
 
+def _generate_vendor_report(
+    paths: list[Path],
+    config: Config,
+    month_filter: list[str] | None,
+    vendor_filter: str | None,
+) -> Path:
+    parsed = _combine_statements(paths, config)
+    available_months = sorted(
+        {value.strftime("%Y-%m") for value in parsed.transactions["date"].dropna()}
+    )
+    selected_months = month_filter or available_months
+    missing_months = [month for month in selected_months if month not in available_months]
+    if missing_months:
+        raise ValueError(
+            "Requested month(s) not found in the statements: " + ", ".join(missing_months)
+        )
+    transactions = filter_transactions_by_months(parsed.transactions, selected_months)
+    classified = classify_transactions(transactions, config)
+    debits = split_by_type(classified)["debits"]
+    suffix = "filtered" if vendor_filter else "all_vendors"
+    output_path = config.output_dir / (
+        f"{selected_months[0]}_to_{selected_months[-1]}_{suffix}_payment_history.xlsx"
+    )
+    return write_vendor_report(
+        output_path,
+        debits,
+        f"{selected_months[0]} to {selected_months[-1]}",
+        vendor_filter=vendor_filter,
+    )
+
+
 def main() -> None:
     args = parse_args()
     config_path = Path(args.config)
@@ -315,6 +356,19 @@ def main() -> None:
         sys.exit(1)
 
     generated: list[Path] = []
+    if args.vendor_report:
+        try:
+            vendor_output = _generate_vendor_report(
+                input_paths,
+                config,
+                month_filter,
+                args.vendor,
+            )
+            generated.append(vendor_output)
+            print(f"Vendor report written: {vendor_output}")
+        except Exception as exc:
+            print(f"Failed to generate vendor report: {exc}", file=sys.stderr)
+
     if args.combine:
         try:
             combined = _combine_statements(input_paths, config)
