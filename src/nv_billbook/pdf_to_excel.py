@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import re
 import sys
+from datetime import datetime
 from pathlib import Path
 
 import pandas as pd
@@ -71,6 +72,59 @@ def _extract_transaction_lines(lines: list[str]) -> list[str]:
     return transactions
 
 
+def _first_transaction_type(page) -> str:
+    """Read the first row's debit/credit side when no prior balance exists."""
+    try:
+        tables = page.extract_tables()
+    except Exception:
+        return ""
+    for table in tables:
+        if not table:
+            continue
+        header = [_clean_text(value).lower().replace(" ", "") for value in table[0]]
+        if "withdrawalamt." not in header or "depositamt." not in header:
+            continue
+        withdrawal_index = header.index("withdrawalamt.")
+        deposit_index = header.index("depositamt.")
+        for row in table[1:]:
+            if not row or not _clean_text(row[0]):
+                continue
+            withdrawal = _clean_text(row[withdrawal_index]) if withdrawal_index < len(row) else ""
+            deposit = _clean_text(row[deposit_index]) if deposit_index < len(row) else ""
+            if withdrawal and not deposit:
+                return "Debit"
+            if deposit and not withdrawal:
+                return "Credit"
+    return ""
+
+
+def extract_hdfc_pdf_metadata(pdf_path: Path) -> dict[str, object]:
+    """Extract statement period and account number from an HDFC PDF header."""
+    period_start = period_end = None
+    account_no = None
+    with pdfplumber.open(pdf_path) as pdf:
+        header_text = "\n".join((page.extract_text() or "") for page in pdf.pages[:2])
+
+    period_match = re.search(
+        r"From\s*:\s*(\d{2}/\d{2}/\d{4})\s+To\s*:\s*(\d{2}/\d{2}/\d{4})",
+        header_text,
+        re.IGNORECASE,
+    )
+    if period_match:
+        period_start = datetime.strptime(period_match.group(1), "%d/%m/%Y").date()
+        period_end = datetime.strptime(period_match.group(2), "%d/%m/%Y").date()
+
+    account_match = re.search(r"AccountNo\s*:\s*(\d+)", header_text, re.IGNORECASE)
+    if account_match:
+        account_no = account_match.group(1)
+
+    return {
+        "period_start": period_start,
+        "period_end": period_end,
+        "account_no": account_no,
+    }
+
+
 def extract_hdfc_pdf_transactions(pdf_path: Path) -> pd.DataFrame:
     rows: list[dict[str, object]] = []
     previous_closing: float | None = None
@@ -80,7 +134,7 @@ def extract_hdfc_pdf_transactions(pdf_path: Path) -> pd.DataFrame:
             text = page.extract_text() or ""
             lines = _normalize_lines(text)
             txns = _extract_transaction_lines(lines)
-            for txn in txns:
+            for txn_index, txn in enumerate(txns):
                 match = TRANSACTION_RE.match(txn)
                 if not match:
                     continue
@@ -94,6 +148,8 @@ def extract_hdfc_pdf_transactions(pdf_path: Path) -> pd.DataFrame:
                         txn_type = "Credit"
                     elif closing < previous_closing:
                         txn_type = "Debit"
+                elif previous_closing is None:
+                    txn_type = _first_transaction_type(page) if txn_index == 0 else ""
                 previous_closing = closing if closing is not None else previous_closing
                 rows.append(
                     {

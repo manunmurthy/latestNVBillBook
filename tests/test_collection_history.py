@@ -15,7 +15,11 @@ from nv_billbook.collection_history import (
     month_keys_for_period,
 )
 from nv_billbook.flats_registry import FlatInfo, FlatsRegistry
-from nv_billbook.history import _load_statements, _parse_flat_filter
+from nv_billbook.history import (
+    _deduplicate_transactions,
+    _load_statements,
+    _parse_flat_filter,
+)
 from nv_billbook.history_reporter import write_collection_history_report
 
 
@@ -135,6 +139,34 @@ def test_flat_filter_accepts_comma_separated_flat_numbers(registry: FlatsRegistr
 def test_flat_filter_reports_all_unknown_flat_numbers(registry: FlatsRegistry) -> None:
     with pytest.raises(ValueError, match="A003, A004"):
         _parse_flat_filter("A003,A004", registry)
+
+
+def test_history_deduplicates_same_transaction_from_pdf_and_excel() -> None:
+    transactions = pd.DataFrame(
+        [
+            {
+                "date": date(2026, 3, 5),
+                "narration": "UPI-Payer A",
+                "reference": "123",
+                "debit": 0.0,
+                "credit": 2787.0,
+                "balance": 10000.0,
+                "source_file": "statement.xls",
+            },
+            {
+                "date": date(2026, 3, 5),
+                "narration": "UPI-PAYER A",
+                "reference": "123",
+                "debit": 0.0,
+                "credit": 2787.0,
+                "balance": 10000.0,
+                "source_file": "statement.pdf",
+            },
+        ]
+    )
+
+    result = _deduplicate_transactions(transactions)
+    assert len(result) == 1
 
 
 def test_load_statements_combines_multiple_files(tmp_path, monkeypatch) -> None:

@@ -65,13 +65,21 @@ def _format_sheet_columns(writer: pd.ExcelWriter, sheet_name: str, df: pd.DataFr
                     cell.number_format = "#,##0.00"
 
 
-def _add_summary_cards(worksheet, summary_df: pd.DataFrame) -> None:
+def _add_summary_cards(
+    worksheet,
+    summary_df: pd.DataFrame,
+    reconciliation_df: pd.DataFrame | None = None,
+) -> None:
     """Add a compact visual snapshot beside the detailed summary table."""
     metrics = {
         str(row["Metric"]): row["Value"]
         for _, row in summary_df.iterrows()
         if str(row["Metric"]).strip()
     }
+    if reconciliation_df is not None and "Status" in reconciliation_df:
+        metrics["Pending Flats"] = int(
+            (reconciliation_df["Status"] == "Pending").sum()
+        )
     cards = [
         ("Total Credits (₹)", "Total Credits", BLUE_FILL),
         ("Total Debits (₹)", "Total Debits", RED_FILL),
@@ -206,6 +214,7 @@ def _prepare_display_frame(df: pd.DataFrame, txn_type: str) -> pd.DataFrame:
 def _build_summary_rows(
     parsed: ParsedStatement,
     split: dict[str, pd.DataFrame],
+    report_label: str | None = None,
 ) -> pd.DataFrame:
     all_txn = split["all"]
     credits = split["credits"]
@@ -229,7 +238,11 @@ def _build_summary_rows(
         )
 
     rows = [
-        ("Report Month", parsed.meta.period_start.strftime("%B %Y") if parsed.meta.period_start else ""),
+        (
+            "Report Month",
+            report_label
+            or (parsed.meta.period_start.strftime("%B %Y") if parsed.meta.period_start else ""),
+        ),
         ("Statement Period", period_label),
         ("Source File", parsed.meta.source_file.name),
         ("Account No", parsed.meta.account_no or ""),
@@ -295,12 +308,15 @@ def write_monthly_report(
     report_month: str,
     flats_registry: FlatsRegistry | None = None,
     water_bill_per_month: object | None = None,
+    period_months: int = 1,
+    report_label: str | None = None,
+    combined_report: bool = False,
 ) -> Path:
     """Write a monthly workbook and return the output path."""
     config.output_dir.mkdir(parents=True, exist_ok=True)
     output_path = config.output_dir / f"{report_month}_summary.xlsx"
 
-    summary_df = _build_summary_rows(parsed, split)
+    summary_df = _build_summary_rows(parsed, split, report_label=report_label)
     credits_df = _prepare_display_frame(split["credits"], "credit")
     debits_df = _prepare_display_frame(split["debits"], "debit")
     other_df = _prepare_display_frame(split["other"], "other")
@@ -310,6 +326,7 @@ def write_monthly_report(
             split["credits"],
             flats_registry,
             water_bill_per_month=water_bill_per_month,
+            period_months=period_months,
         )
         if flats_registry
         else pd.DataFrame()
@@ -356,10 +373,11 @@ def write_monthly_report(
         summary_sheet["A1"] = config.society_name
         summary_sheet["A1"].font = TITLE_FONT
         summary_sheet["A1"].fill = SUMMARY_FILL
-        summary_sheet["A2"] = f"Monthly Bank Report — {report_month}"
+        report_kind = "Combined Bank Report" if combined_report else "Monthly Bank Report"
+        summary_sheet["A2"] = f"{report_kind} — {report_month}"
         summary_sheet["A2"].font = Font(bold=True, size=11)
         summary_sheet.merge_cells("A1:B1")
         summary_sheet.merge_cells("A2:B2")
-        _add_summary_cards(summary_sheet, summary_df)
+        _add_summary_cards(summary_sheet, summary_df, reconciliation_df)
 
     return output_path
