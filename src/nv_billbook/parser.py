@@ -84,6 +84,24 @@ def filter_transactions_by_months(
     return transactions.loc[month_keys.isin(months)].copy()
 
 
+def deduplicate_transactions(transactions: pd.DataFrame) -> pd.DataFrame:
+    """Remove duplicate rows commonly created by supplying PDF and Excel copies."""
+    if transactions.empty:
+        return transactions
+    result = transactions.copy()
+    result["_narration_key"] = (
+        result["narration"]
+        .fillna("")
+        .astype(str)
+        .str.upper()
+        .str.replace(r"\s+", "", regex=True)
+    )
+    key_columns = ["date", "_narration_key", "reference", "debit", "credit", "balance"]
+    return result.drop_duplicates(subset=key_columns, keep="first").drop(
+        columns=["_narration_key"]
+    )
+
+
 def _read_raw_table(path: Path) -> pd.DataFrame:
     suffix = path.suffix.lower()
     if suffix == ".csv":

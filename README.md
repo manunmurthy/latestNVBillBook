@@ -234,6 +234,27 @@ PYTHONPATH=src python3 -m nv_billbook.history \
 
 Only those months are included in the history workbook. The month list may contain one month or any number of months present in the statement.
 
+**Option G — Combine multiple statements into one workbook:**
+
+To combine several Excel/PDF statements into the existing consolidated sheets, use `--combine`:
+
+```bash
+PYTHONPATH=src python3 -m nv_billbook.main \
+  --input "/full/path/to/statements" \
+  --input-format both \
+  --combine
+```
+
+The output contains one `Summary`, `Credits`, `Debits`, `Other`, `All Transactions`, and `Maintenance Reconciliation` sheet. If selected months are supplied, only those months are combined:
+
+```bash
+PYTHONPATH=src python3 -m nv_billbook.main \
+  --input "/full/path/to/statements" \
+  --input-format both \
+  --months 2026-04,2026-07,2026-10 \
+  --combine
+```
+
 ### Step 4 — Open the report
 
 ```bash
@@ -259,6 +280,7 @@ open data/output/2026-07_summary.xlsx      # macOS
 | `--input /path/to/folder/ --all` | Process all statements in a folder (`.xls`, `.xlsx`, `.xlsm`, or `.csv`) |
 | `--month 2026-07` | Extract only July 2026 transactions; also works when the source contains multiple months |
 | `--months 2026-04,2026-07` | Extract only the listed transaction months from a longer statement |
+| `--combine` | Combine all selected statement files into one consolidated workbook |
 | `--config path/to/config.yaml` | Use a different config file |
 | `--water-bill 287` | Set the fixed per-flat water bill for this report; overrides `flats.yaml` |
 | `--input-format auto` | Read files based on extension; also supports `excel`, `pdf`, and `both` |

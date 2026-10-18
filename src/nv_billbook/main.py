@@ -7,6 +7,8 @@ import sys
 from dataclasses import replace
 from pathlib import Path
 
+import pandas as pd
+
 from nv_billbook.classifier import classify_transactions, split_by_type
 from nv_billbook.config import Config
 from nv_billbook.flats_registry import FlatsRegistry
@@ -20,6 +22,7 @@ from nv_billbook.parser import (
     normalize_input_format,
     parse_month_list,
     parse_hdfc_statement,
+    deduplicate_transactions,
 )
 from nv_billbook.reconciliation import build_maintenance_reconciliation
 from nv_billbook.reporter import write_monthly_report
@@ -62,6 +65,11 @@ def parse_args() -> argparse.Namespace:
         choices=INPUT_FORMATS,
         default="auto",
         help="Read Excel/CSV, PDF, both, or detect automatically (default: auto)",
+    )
+    parser.add_argument(
+        "--combine",
+        action="store_true",
+        help="Combine all selected statement files into one consolidated workbook",
     )
     return parser.parse_args()
 
@@ -108,34 +116,65 @@ def _load_flats_registry(config: Config) -> FlatsRegistry | None:
     return registry
 
 
-def _process_statement(
-    path: Path,
+def _generate_reports(
+    parsed: ParsedStatement,
     config: Config,
     month_filter: list[str] | None,
     flats_registry: FlatsRegistry | None,
     water_bill_per_month: float | None,
+    combined: bool = False,
 ) -> list[Path]:
-    print(f"Processing: {path.name}")
-    parsed = parse_hdfc_statement(path, config)
-    selected_months = month_filter or [infer_report_month(parsed.meta, parsed.transactions)]
-    generated: list[Path] = []
-    for report_month in selected_months:
+    if combined:
+        available_months = sorted(
+            {
+                value.strftime("%Y-%m")
+                for value in parsed.transactions["date"].dropna()
+            }
+        )
+        selected_months = month_filter or available_months
+        missing_months = [month for month in selected_months if month not in available_months]
+        if missing_months:
+            raise ValueError(
+                "Requested month(s) not found in the combined statements: "
+                + ", ".join(missing_months)
+            )
         filtered_transactions = filter_transactions_by_months(
             parsed.transactions,
-            [report_month],
+            selected_months,
         )
         if filtered_transactions.empty:
-            print(f"  Skipped (no transactions found for {report_month})")
-            continue
-
+            return []
         dates = filtered_transactions["date"].dropna()
-        filtered_meta = parsed.meta
-        if not dates.empty:
-            filtered_meta = replace(
-                parsed.meta,
-                period_start=min(dates),
-                period_end=max(dates),
+        filtered_meta = replace(
+            parsed.meta,
+            period_start=min(dates) if not dates.empty else parsed.meta.period_start,
+            period_end=max(dates) if not dates.empty else parsed.meta.period_end,
+        )
+        report_month = f"{selected_months[0]}_to_{selected_months[-1]}"
+        parsed_items = [(report_month, filtered_meta, filtered_transactions)]
+    else:
+        selected_months = month_filter or [infer_report_month(parsed.meta, parsed.transactions)]
+        parsed_items = []
+        for report_month in selected_months:
+            filtered_transactions = filter_transactions_by_months(
+                parsed.transactions,
+                [report_month],
             )
+            if filtered_transactions.empty:
+                print(f"  Skipped (no transactions found for {report_month})")
+                continue
+            dates = filtered_transactions["date"].dropna()
+            filtered_meta = parsed.meta
+            if not dates.empty:
+                filtered_meta = replace(
+                    parsed.meta,
+                    period_start=min(dates),
+                    period_end=max(dates),
+                )
+            parsed_items.append((report_month, filtered_meta, filtered_transactions))
+
+    generated: list[Path] = []
+    for report_month, filtered_meta, filtered_transactions in parsed_items:
         filtered_parsed = ParsedStatement(filtered_meta, filtered_transactions)
         classified = classify_transactions(filtered_transactions, config, flats_registry)
         split = split_by_type(classified)
@@ -146,6 +185,13 @@ def _process_statement(
             report_month,
             flats_registry=flats_registry,
             water_bill_per_month=water_bill_per_month,
+            period_months=len(selected_months) if combined else 1,
+            report_label=(
+                f"{selected_months[0]} to {selected_months[-1]}"
+                if combined
+                else None
+            ),
+            combined_report=combined,
         )
 
         credits = split["credits"]
@@ -167,6 +213,7 @@ def _process_statement(
                 credits,
                 flats_registry,
                 water_bill_per_month=water_bill_per_month,
+                period_months=len(selected_months) if combined else 1,
             )
             status_counts = reconciliation["Status"].value_counts()
             print(
@@ -183,6 +230,54 @@ def _process_statement(
         print(f"  Report written: {output_path}")
         generated.append(output_path)
     return generated
+
+
+def _process_statement(
+    path: Path,
+    config: Config,
+    month_filter: list[str] | None,
+    flats_registry: FlatsRegistry | None,
+    water_bill_per_month: float | None,
+) -> list[Path]:
+    print(f"Processing: {path.name}")
+    return _generate_reports(
+        parse_hdfc_statement(path, config),
+        config,
+        month_filter,
+        flats_registry,
+        water_bill_per_month,
+    )
+
+
+def _combine_statements(paths: list[Path], config: Config) -> ParsedStatement:
+    """Parse and combine multiple statement files into one normalized statement."""
+    parsed_statements = []
+    for path in paths:
+        try:
+            parsed_statements.append(parse_hdfc_statement(path, config))
+        except Exception as exc:
+            print(f"Skipping {path.name}: {exc}", file=sys.stderr)
+    if not parsed_statements:
+        raise ValueError("No valid statement files found to combine.")
+    transactions = deduplicate_transactions(
+        pd.concat(
+            [parsed.transactions for parsed in parsed_statements],
+            ignore_index=True,
+        )
+    ).sort_values(
+        by=["date", "source_file", "date_str"],
+        kind="stable",
+        ignore_index=True,
+    )
+    dates = transactions["date"].dropna()
+    first_meta = parsed_statements[0].meta
+    meta = replace(
+        first_meta,
+        source_file=Path("Combined statements"),
+        period_start=min(dates) if not dates.empty else first_meta.period_start,
+        period_end=max(dates) if not dates.empty else first_meta.period_end,
+    )
+    return ParsedStatement(meta=meta, transactions=transactions)
 
 
 def main() -> None:
@@ -220,18 +315,34 @@ def main() -> None:
         sys.exit(1)
 
     generated: list[Path] = []
-    for path in input_paths:
+    if args.combine:
         try:
-            outputs = _process_statement(
-                path,
-                config,
-                month_filter,
-                flats_registry,
-                args.water_bill,
+            combined = _combine_statements(input_paths, config)
+            generated.extend(
+                _generate_reports(
+                    combined,
+                    config,
+                    month_filter,
+                    flats_registry,
+                    args.water_bill,
+                    combined=True,
+                )
             )
-            generated.extend(outputs)
         except Exception as exc:
-            print(f"Failed to process {path.name}: {exc}", file=sys.stderr)
+            print(f"Failed to combine statements: {exc}", file=sys.stderr)
+    else:
+        for path in input_paths:
+            try:
+                outputs = _process_statement(
+                    path,
+                    config,
+                    month_filter,
+                    flats_registry,
+                    args.water_bill,
+                )
+                generated.extend(outputs)
+            except Exception as exc:
+                print(f"Failed to process {path.name}: {exc}", file=sys.stderr)
 
     if not generated:
         print("No reports generated.", file=sys.stderr)

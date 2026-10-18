@@ -34,12 +34,15 @@ def build_maintenance_reconciliation(
     credits: pd.DataFrame,
     registry: FlatsRegistry,
     water_bill_per_month: object | None = None,
+    period_months: int = 1,
 ) -> pd.DataFrame:
     """Return exactly one reconciliation row for every registered flat.
 
     Only credits resolved to a flat in the registry are included in the paid
     total. Payments for unknown or unassigned flats remain on Credits for review.
     """
+    if period_months < 1:
+        raise ValueError("period_months must be at least 1")
     rate = _money(registry.meta.get("maintenance_rate_per_sqft", 2.5))
     water_bill = _money(
         registry.meta.get("water_bill_per_month", 0)
@@ -57,8 +60,8 @@ def build_maintenance_reconciliation(
 
     rows: list[dict[str, object]] = []
     for flat_no, info in registry.flats.items():
-        expected_maintenance = _money(Decimal(info.sqft) * rate)
-        expected = expected_maintenance + water_bill
+        expected_maintenance = _money(Decimal(info.sqft) * rate * period_months)
+        expected = expected_maintenance + water_bill * period_months
         paid = paid_by_flat[flat_no].quantize(MONEY_QUANTUM, rounding=ROUND_HALF_UP)
 
         if paid == Decimal("0.00"):
