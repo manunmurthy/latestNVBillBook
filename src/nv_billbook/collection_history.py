@@ -11,7 +11,15 @@ import pandas as pd
 from nv_billbook.flats_registry import FlatsRegistry
 
 
-HISTORY_COLUMNS = ["Flat", "Date", "Month", "Payer", "Payment Type", "Amount"]
+HISTORY_COLUMNS = [
+    "Flat",
+    "Date",
+    "Cheque / Ref No.",
+    "Month",
+    "Payer",
+    "Payment Type",
+    "Amount",
+]
 MONTHLY_RECONCILIATION_COLUMNS = [
     "Flat",
     "Month",
@@ -74,11 +82,14 @@ def build_flat_transaction_history(credits: pd.DataFrame, registry: FlatsRegistr
         transaction_date = pd.to_datetime(transaction.get("date"), errors="coerce")
         if pd.isna(transaction_date):
             continue
+        reference = transaction.get("reference")
+        reference_text = "" if reference is None or pd.isna(reference) else str(reference)
 
         rows.append(
             {
                 "Flat": info.flat_no,
                 "Date": transaction_date.strftime("%d/%m/%Y"),
+                "Cheque / Ref No.": reference_text,
                 "Month": transaction_date.strftime("%b %Y"),
                 "Payer": transaction.get("counterparty") or "",
                 "Payment Type": transaction.get("category") or "",

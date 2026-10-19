@@ -39,7 +39,7 @@ def registry() -> FlatsRegistry:
 def credits() -> pd.DataFrame:
     return pd.DataFrame(
         [
-            {"date": date(2026, 3, 5), "flat_no": "A001", "counterparty": "Payer A", "category": "Maintenance", "credit": 2787},
+            {"date": date(2026, 3, 5), "flat_no": "A001", "counterparty": "Payer A", "category": "Maintenance", "credit": 2787, "reference": "REF-001"},
             {"date": date(2026, 4, 5), "flat_no": "A001", "counterparty": "Payer A", "category": "Maintenance", "credit": 2500},
             {"date": date(2026, 5, 5), "flat_no": "A001", "counterparty": "Payer A", "category": "Maintenance", "credit": 3100},
             {"date": date(2026, 3, 6), "flat_no": None, "counterparty": "Unknown", "category": "Maintenance", "credit": 9999},
@@ -59,6 +59,8 @@ def test_history_and_reconciliation_include_every_flat(
 
     assert len(history) == 3
     assert list(history["Flat"]) == ["A001", "A001", "A001"]
+    assert history.loc[0, "Date"] == "05/03/2026"
+    assert history.loc[0, "Cheque / Ref No."] == "REF-001"
     assert len(monthly) == 6
     assert list(monthly[monthly["Flat"] == "A001"]["Status"]) == ["Paid", "Short", "Excess"]
     assert list(monthly[monthly["Flat"] == "A002"]["Status"]) == ["Pending"] * 3

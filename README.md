@@ -46,7 +46,7 @@ Output file: **`data/output/YYYY-MM_summary.xlsx`**
 
 ## Multi-month collection history
 
-For one HDFC statement that covers 3, 6, or 12 calendar months, create a separate consolidated workbook without changing the monthly report. Excel and PDF statements use the same command:
+For one HDFC statement covering 3, 6, 12, 24, or any specified number of months, create a separate consolidated workbook without changing the monthly report. If `--months` is omitted, all available months in the input data are included. Excel and PDF statements use the same command:
 
 ```bash
 PYTHONPATH=src python3 -m nv_billbook.history \
@@ -83,7 +83,7 @@ PYTHONPATH=src python3 -m nv_billbook.history \
 
 That creates `data/output/YYYY-MM_to_YYYY-MM_selected_collection_history.xlsx` with ten worksheets: `A301` through `A310`.
 
-If your 3, 6, or 12 months are saved as separate statement files, point `--input` to the folder instead of a single file. The command will read every statement in that folder, combine them, and calculate the history across the full period:
+If your months are saved as separate statement files, point `--input` to the folder instead of a single file. The command will read every statement in that folder, combine them, and calculate the history across the full period:
 
 ```bash
 PYTHONPATH=src python3 -m nv_billbook.history \
@@ -553,7 +553,7 @@ Re-run the script after saving — no code changes needed.
 - [x] Flat registry (`flats.yaml`) — 200 flats with SBA sqft + bank payer names
 - [x] Payer-to-flat matching from bank statement names only
 - [x] Flat-wise maintenance reconciliation worksheet
-- [x] Multi-month (3, 6, or 12) flat transaction history and reconciliation report
+- [x] Multi-month flat transaction history and reconciliation report for any statement period
 - [x] PDF statement support for HDFC text-based exports
 - [ ] Flat-wise collection pivot (like legacy NV Maintenance workbook)
 - [ ] Multi-month comparison sheet

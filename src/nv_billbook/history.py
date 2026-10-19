@@ -30,17 +30,20 @@ from nv_billbook.parser import (
 )
 
 
-SUPPORTED_PERIOD_LENGTHS = {3, 6, 12}
-
-
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Create a flat-wise history report from one 3-, 6-, or 12-month HDFC statement."
+        description=(
+            "Create a flat-wise history report for 3, 6, 12, 24, or any specified "
+            "number of available months."
+        )
     )
     parser.add_argument(
         "--input",
         required=True,
-        help="HDFC statement file or folder covering 3, 6, or 12 calendar months",
+        help=(
+            "HDFC statement file or folder covering 3, 6, 12, 24, or any specified "
+            "number of available months"
+        ),
     )
     parser.add_argument(
         "--flat",
@@ -188,13 +191,6 @@ def main() -> None:
         statement_files = find_statement_files(input_path, args.input_format)
         print(f"Loaded {len(statement_files)} statement file(s) from folder: {input_path}")
         print(f"Combining {len(month_keys)} month(s): {', '.join(month_keys)}")
-    if input_path.is_file() and not requested_months and len(month_keys) not in SUPPORTED_PERIOD_LENGTHS:
-        print(
-            "This command requires transactions from 3, 6, or 12 calendar months; "
-            f"found: {', '.join(month_keys) or 'none'}.",
-            file=sys.stderr,
-        )
-        sys.exit(1)
     if not month_keys:
         print("No transaction months found in the provided statements.", file=sys.stderr)
         sys.exit(1)
